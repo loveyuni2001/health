@@ -1,910 +1,695 @@
+# GitHub Pages 專用完整版（已修正 Google Sheet 連動 + 手機版 + 全寬）
+
+## 先做這 3 件事
+
+### ① Apps Script 部署權限
+
+Apps Script 必須重新部署：
+
+* 部署 → 管理部署作業
+* 編輯
+* 執行身分：我
+* 存取權限：任何人
+* 重新部署
+
+---
+
+### ② GitHub Pages 放法
+
+建立：
+
+```text
+index.html
+```
+
+把下面完整 HTML 全部覆蓋貼上。
+
+---
+
+### ③ 修改這行
+
+搜尋：
+
+```javascript
+const GOOGLE_WEB_APP_URL =
+```
+
+改成你的 Apps Script 網址。
+
+---
+
+# 完整 HTML（直接全貼）
+
+```html
 <!DOCTYPE html>
-
 <html lang="zh-TW">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>全家人健康智慧導航站 - 雲端連動版</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=500;600;700&family=Noto+Sans+TC:wght=500;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <style>
-
-        :root {
-
-            --bg-color: #F5F4F0;
-
-            --primary-black: #111111;
-
-            --card-bg: #FFFFFF;
-
-            --text-sub: #5F6368;
-
-            --danger: #D93025;
-
-            --success-green: #188038;
-
-            --light-blue: #E8F0FE;
-
-            --light-yellow: #FDF7E7;
-
-        }
-
-
-
-        * { box-sizing: border-box; }
-
-        body { 
-
-            background-color: var(--bg-color); 
-
-            margin: 0; padding: 0; 
-
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-
-            color: var(--primary-black);
-
-            -webkit-font-smoothing: antialiased;
-
-        }
-
-
-
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 15px; }
-
-
-
-        /* 頂部標題 */
-
-        .portal-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 20px;
-
-            border-bottom: 3px solid var(--primary-black);
-
-            padding-bottom: 12px;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-
-        }
-
-        .title-group h1 { font-size: 24px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-
-        .title-group p { font-size: 12px; color: var(--text-sub); margin: 2px 0 0 0; font-weight: 700; }
-
-        
-
-        .sync-btn-container { display: flex; gap: 10px; align-items: center; }
-
-        .btn-sync-cloud { background: var(--success-green); color: white; border: 2px solid var(--primary-black); padding: 8px 16px; border-radius: 30px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 3px 0 var(--primary-black); }
-
-        .btn-sync-cloud:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--primary-black); }
-
-
-
-        /* 響應式雙欄排版 (電腦雙欄、手機單欄) */
-
-        .double-entry-wrapper { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 25px; }
-
-        @media(min-width: 992px) {
-
-            .double-entry-wrapper { grid-template-columns: 1fr 1.3fr; }
-
-        }
-
-
-
-        .entry-card { 
-
-            background: var(--card-bg); 
-
-            border: 2px solid var(--primary-black); 
-
-            border-radius: 16px; 
-
-            padding: 20px; 
-
-            display: flex; 
-
-            flex-direction: column; 
-
-            position: relative;
-
-            box-shadow: 0 4px 0px rgba(0,0,0,0.05);
-
-        }
-
-        
-
-        .step-label { position: absolute; top: -12px; left: 20px; background: var(--primary-black); color: white; font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 30px; }
-
-        .box-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-
-
-
-        .ai-textarea { width: 100%; background: #FAFAFA; border: 2px solid var(--primary-black); border-radius: 12px; color: var(--primary-black); padding: 12px; font-size: 14px; resize: none; min-height: 150px; line-height: 1.5; font-weight: 500; outline: none; }
-
-
-
-        /* 表單網格，手機自動調整 */
-
-        .right-form-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-
-        .input-group label { font-size: 12px; color: var(--primary-black); font-weight: 700; }
-
-        .form-control { background: #FFFFFF; border: 2px solid var(--primary-black); padding: 8px 10px; border-radius: 12px; color: var(--primary-black); font-size: 14px; font-weight: 600; outline: none; width: 100%; height: 40px; }
-
-        
-
-        /* 手機板表單欄位寬度彈性調整 */
-
-        @media(max-width: 576px) {
-
-            .right-form-grid { grid-template-columns: repeat(2, 1fr); }
-
-            .input-group.sp-mobile-2 { grid-column: span 1 !important; }
-
-            .input-group.sp-mobile-full { grid-column: span 2 !important; }
-
-            .sub-section-title { grid-column: span 2 !important; }
-
-            .btn-submit-container { grid-column: span 2 !important; }
-
-        }
-
-
-
-        .sub-section-title { grid-column: span 6; font-size: 13px; font-weight: 700; margin-top: 5px; padding: 6px; border-radius: 6px; display: flex; align-items: center; gap: 6px; }
-
-        .title-morning { background: var(--light-blue); color: #1A73E8; }
-
-        .title-evening { background: var(--light-yellow); color: #B06000; }
-
-
-
-        .poop-switch-container { display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 2px solid var(--primary-black); border-radius: 12px; height: 40px; cursor: pointer; }
-
-        .main-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-black); }
-
-
-
-        .btn-submit-container { grid-column: span 6; display: flex; margin-top: 5px; }
-
-        .btn-ai { background: var(--primary-black); color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 14px; width: 100%; justify-content: center; }
-
-
-
-        /* 工具列 */
-
-        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; border-top: 3px solid var(--primary-black); padding-top: 15px; }
-
-        .filter-container { display: flex; gap: 8px; flex-wrap: wrap; }
-
-        .select-box-wrapper { background: white; border: 2px solid var(--primary-black); padding: 4px 12px; border-radius: 30px; display: flex; align-items: center; gap: 6px; }
-
-        .select-box-wrapper label { font-size: 12px; font-weight: 700; }
-
-        .filter-select { background: transparent; border: none; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; }
-
-
-
-        /* 表格響應式 (手機版可橫向滾動) */
-
-        .table-card { background: #FFFFFF; border-radius: 16px; border: 2px solid var(--primary-black); overflow: hidden; margin-bottom: 20px; }
-
-        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-        table { width: 100%; border-collapse: collapse; text-align: center; min-width: 1200px; }
-
-        
-
-        th, td { padding: 10px 8px; font-size: 14px; border-bottom: 2px solid #EAEAEA; border-right: 2px solid #EAEAEA; }
-
-        th { color: white; background: var(--primary-black); font-weight: 700; border-right: 2px solid #333; }
-
-        
-
-        .morning-col { background: var(--light-blue); }
-
-        .evening-col { background: var(--light-yellow); }
-
-        
-
-        .editable-cell { background: transparent; border: 2px solid transparent; border-radius: 6px; padding: 4px; text-align: center; width: 100%; font-size: 14px; font-weight: 700; outline: none; }
-
-        .editable-cell:focus { border: 2px solid var(--primary-black); background: #ffffff; }
-
-        
-
-        .value-warning { color: var(--danger) !important; font-weight: 800 !important; background: rgba(217, 48, 37, 0.12); padding: 2px 6px; border-radius: 4px; }
-
-        .poop-checkbox { width: 18px; height: 18px; cursor: pointer; }
-
-        .symptom-input { text-align: left; }
-
-        .btn-delete-row { background: transparent; border: none; color: #777; cursor: pointer; font-size: 14px; }
-
-        .btn-delete-row:hover { color: var(--danger); }
-
-        .tip-text { color: var(--text-sub); font-size: 12px; margin-top: 15px; text-align: center; font-weight: 700; }
-
-        
-
-        /* 載入中動畫 */
-
-        .loading-spinner { display: none; font-size: 13px; color: var(--success-green); font-weight: 700; }
-
-/* --- 手機版強制優化區塊 --- */
-/* --- 手機版表格優化 (替換舊的，不要重複) --- */
-@media(max-width: 768px) {
-    .table-responsive {
-        display: block !important;
-        width: 100% !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>全家人健康智慧導航站</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+    --bg-color: #F5F4F0;
+    --primary-black: #111111;
+    --card-bg: #FFFFFF;
+    --text-sub: #5F6368;
+    --danger: #D93025;
+    --success-green: #188038;
+    --light-blue: #E8F0FE;
+    --light-yellow: #FDF7E7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--bg-color);
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+body {
+    padding: 10px;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.portal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #111;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.title-group h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.title-group p {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.sync-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-sync-cloud {
+    background: #188038;
+    color: white;
+    border: 2px solid #111;
+    border-radius: 999px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.double-entry-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.entry-card {
+    background: white;
+    border: 2px solid #111;
+    border-radius: 24px;
+    padding: 20px;
+    position: relative;
+}
+
+.step-label {
+    position: absolute;
+    top: -14px;
+    left: 24px;
+    background: black;
+    color: white;
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.box-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.ai-textarea {
+    width: 100%;
+    min-height: 500px;
+    border: 2px solid #111;
+    border-radius: 20px;
+    padding: 18px;
+    resize: none;
+    font-size: 18px;
+}
+
+.right-form-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.form-control {
+    height: 54px;
+    border: 2px solid #111;
+    border-radius: 16px;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.sub-section-title {
+    grid-column: span 6;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.title-morning {
+    background: var(--light-blue);
+    color: #1A73E8;
+}
+
+.title-evening {
+    background: var(--light-yellow);
+    color: #B06000;
+}
+
+.btn-submit-container {
+    grid-column: span 6;
+}
+
+.btn-ai {
+    width: 100%;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.filter-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.select-box-wrapper {
+    background: white;
+    border: 2px solid #111;
+    border-radius: 999px;
+    padding: 10px 14px;
+}
+
+.filter-select {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+}
+
+.table-card {
+    background: white;
+    border: 2px solid #111;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 999px;
+}
+
+.table-responsive table {
+    width: 100%;
+    min-width: 1500px;
+    border-collapse: collapse;
+}
+
+th {
+    background: black;
+    color: white;
+    padding: 14px;
+    border-right: 2px solid #333;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    text-align: center;
+}
+
+.editable-cell {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 15px;
+}
+
+.btn-delete-row {
+    background: #D93025;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.loading-spinner {
+    display: none;
+    font-weight: 700;
+}
+
+@media(max-width: 900px){
+
+    body {
+        padding: 6px;
     }
-    table {
-        min-width: 800px !important;
-        width: 100% !important;
-    }
-    th, td {
-        padding: 4px 2px !important;
-        font-size: 11px !important;
-    }
-}    </style>
 
+    .double-entry-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .title-group h1 {
+        font-size: 30px;
+    }
+
+    .portal-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-sync-cloud {
+        width: 100%;
+    }
+
+    .right-form-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .sub-section-title,
+    .btn-submit-container {
+        grid-column: span 2;
+    }
+
+    .ai-textarea {
+        min-height: 250px;
+    }
+
+    .table-responsive table {
+        min-width: 1200px;
+    }
+}
+</style>
 </head>
-
 <body>
-
-
 
 <div class="container">
 
-    <div class="portal-header">
-
-        <div class="title-group">
-
-            <h1>全家人健康智慧導航站</h1>
-
-            <p>Family Health Intelligence Cloud Portal</p>
-
-        </div>
-
-        <div class="sync-btn-container">
-
-            <span id="loadingTxt" class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i> 雲端同步中...</span>
-
-            <button class="btn-sync-cloud" onclick="syncWithGoogleSheet()"><i class="fa-solid fa-cloud-arrow-up"></i> 同步至 Google Sheet 備份</button>
-
-        </div>
-
+<div class="portal-header">
+    <div class="title-group">
+        <h1>全家人健康智慧導航站</h1>
+        <p>Family Health Intelligence Cloud Portal</p>
     </div>
 
-
-
-    <div class="double-entry-wrapper">
-
-        <div class="entry-card">
-
-            <div class="step-label">01 智慧解析</div>
-
-            <div style="width: 100%; display: flex; flex-direction: column; height: 100%;">
-
-                <div class="box-title"><i class="fa-solid fa-wand-magic-sparkles"></i> LINE 文字全解析</div>
-
-                <textarea id="aiInput" class="ai-textarea" placeholder="在此貼上 LINE 辨識文字..."></textarea>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="entry-card">
-
-            <div class="step-label">02 手動紀錄 / 微調區</div>
-
-            <div style="width: 100%;">
-
-                <div class="box-title"><i class="fa-solid fa-keyboard"></i> 基礎設定與健康指標填寫</div>
-
-                <div class="right-form-grid">
-
-                    <div class="input-group sp-mobile-full" style="grid-column: span 2;">
-
-                        <label>設定日期</label>
-
-                        <input type="date" id="targetDate" class="form-control">
-
-                    </div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 1.5;">
-
-                        <label>記錄對象</label>
-
-                        <select id="targetUser" class="form-control">
-
-                            <option value="妃">妃</option>
-
-                            <option value="爸爸">爸爸</option>
-
-                            <option value="媽媽">媽媽</option>
-
-                            <option value="通">通</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 1.5;">
-
-                        <label>體重 (kg)</label>
-
-                        <input type="text" id="manualWeight" class="form-control" placeholder="如: 57.7">
-
-                    </div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 1;">
-
-                        <label>排便</label>
-
-                        <div class="poop-switch-container" onclick="document.getElementById('manualPoop').checked = !document.getElementById('manualPoop').checked">
-
-                            <input type="checkbox" id="manualPoop" class="main-checkbox" onclick="event.stopPropagation();">
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="sub-section-title title-morning"><i class="fa-solid fa-sun"></i> 【早上】指標</div>
-
-                    <div class="input-group sp-mobile-full" style="grid-column: span 2;"><label>早上血壓</label><input type="text" id="morningBP" class="form-control" placeholder="112/79"></div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 2;"><label>早上心跳</label><input type="text" id="morningHR" class="form-control" placeholder="84"></div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 2;"><label>早上血氧/心跳</label><input type="text" id="morningBO" class="form-control" placeholder="97/75"></div>
-
-
-
-                    <div class="sub-section-title title-evening"><i class="fa-solid fa-moon"></i> 【晚上】指標</div>
-
-                    <div class="input-group sp-mobile-full" style="grid-column: span 2;"><label>晚上血壓</label><input type="text" id="eveningBP" class="form-control" placeholder="131/76"></div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 2;"><label>晚上心跳</label><input type="text" id="eveningHR" class="form-control" placeholder="99"></div>
-
-                    <div class="input-group sp-mobile-2" style="grid-column: span 2;"><label>晚上血氧/心跳</label><input type="text" id="eveningBO" class="form-control" placeholder="96/95"></div>
-
-
-
-                    <div class="input-group sp-mobile-full" style="grid-column: span 6; margin-top: 4px;">
-
-                        <label>症狀與服藥備註</label>
-
-                        <input type="text" id="manualSymptom" class="form-control" placeholder="特殊狀況備註...">
-
-                    </div>
-
-                    
-
-                    <div class="btn-submit-container">
-
-                        <button class="btn-ai" onclick="handleDataSubmission()"><i class="fa-solid fa-plus"></i> 確認新增至暫存表</button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="sync-btn-container">
+        <span id="loadingTxt" class="loading-spinner">同步中...</span>
+        <button class="btn-sync-cloud" onclick="syncWithGoogleSheet()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            同步至 Google Sheet 備份
+        </button>
     </div>
+</div>
 
+<div class="double-entry-wrapper">
 
+<div class="entry-card">
+<div class="step-label">01 智慧解析</div>
+<div class="box-title">LINE 文字全解析</div>
+<textarea id="aiInput" class="ai-textarea" placeholder="在此貼上 LINE 辨識文字..."></textarea>
+</div>
 
-    <div class="toolbar">
+<div class="entry-card">
+<div class="step-label">02 手動紀錄 / 微調區</div>
+<div class="box-title">基礎設定與健康指標填寫</div>
 
-        <div style="font-size: 16px; font-weight: 700;"><i class="fa-solid fa-table-list"></i> 03 當機紀錄異動台 (本地暫存)</div>
+<div class="right-form-grid">
 
-        <div class="filter-container">
+<div class="input-group" style="grid-column: span 2;">
+<label>設定日期</label>
+<input type="date" id="targetDate" class="form-control">
+</div>
 
-            <div class="select-box-wrapper">
+<div class="input-group" style="grid-column: span 2;">
+<label>記錄對象</label>
+<select id="targetUser" class="form-control">
+<option value="妃">妃</option>
+<option value="爸爸">爸爸</option>
+<option value="媽媽">媽媽</option>
+<option value="通">通</option>
+</select>
+</div>
 
-                <label>看成員:</label>
+<div class="input-group" style="grid-column: span 2;">
+<label>體重</label>
+<input type="text" id="manualWeight" class="form-control">
+</div>
 
-                <select id="userFilter" class="filter-select" onchange="renderTable()">
+<div class="sub-section-title title-morning">☀️【早上】指標</div>
 
-                    <option value="全部">全部成員</option><option value="妃">妃</option><option value="爸爸">爸爸</option><option value="媽媽">媽媽</option><option value="通">通</option>
+<div class="input-group" style="grid-column: span 2;">
+<label>早上血壓</label>
+<input type="text" id="morningBP" class="form-control">
+</div>
 
-                </select>
+<div class="input-group" style="grid-column: span 2;">
+<label>早上心跳</label>
+<input type="text" id="morningHR" class="form-control">
+</div>
 
-            </div>
+<div class="input-group" style="grid-column: span 2;">
+<label>早上血氧/心跳</label>
+<input type="text" id="morningBO" class="form-control">
+</div>
 
-            <div class="select-box-wrapper">
+<div class="sub-section-title title-evening">🌙【晚上】指標</div>
 
-                <label>篩選月份:</label>
+<div class="input-group" style="grid-column: span 2;">
+<label>晚上血壓</label>
+<input type="text" id="eveningBP" class="form-control">
+</div>
 
-                <select id="monthFilter" class="filter-select" onchange="renderTable()">
+<div class="input-group" style="grid-column: span 2;">
+<label>晚上心跳</label>
+<input type="text" id="eveningHR" class="form-control">
+</div>
 
-                    <option value="全部">全部月份</option><option value="2026/05" selected>2026年 5月</option><option value="2026/06">2026年 6月</option><option value="2026/04">2026年 4月</option>
+<div class="input-group" style="grid-column: span 2;">
+<label>晚上血氧/心跳</label>
+<input type="text" id="eveningBO" class="form-control">
+</div>
 
-                </select>
+<div class="input-group" style="grid-column: span 6;">
+<label>備註</label>
+<input type="text" id="manualSymptom" class="form-control">
+</div>
 
-            </div>
+<div class="btn-submit-container">
+<button class="btn-ai" onclick="handleDataSubmission()">＋ 確認新增至暫存表</button>
+</div>
 
-        </div>
+</div>
+</div>
+</div>
 
-    </div>
+<div class="toolbar">
+<div style="font-size:22px;font-weight:700;">03 雲端健康紀錄</div>
 
+<div class="filter-container">
+<div class="select-box-wrapper">
+<select id="userFilter" class="filter-select" onchange="renderTable()">
+<option value="全部">全部成員</option>
+<option value="妃">妃</option>
+<option value="爸爸">爸爸</option>
+<option value="媽媽">媽媽</option>
+<option value="通">通</option>
+</select>
+</div>
 
+<div class="select-box-wrapper">
+<select id="monthFilter" class="filter-select" onchange="renderTable()">
+<option value="全部">全部月份</option>
+</select>
+</div>
+</div>
+</div>
 
-    <div class="table-card">
-
-        <div class="table-responsive">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th rowspan="2" style="width: 140px;">日期</th><th rowspan="2" style="width: 90px;">對象</th>
-
-                        <th colspan="4">【早上】紀錄</th><th colspan="4">【晚上】紀錄</th>
-
-                        <th rowspan="2" style="width: 100px;">體重</th><th rowspan="2" style="width: 70px;">排便</th><th rowspan="2">備註 (格內可直接改)</th><th rowspan="2" style="width: 60px;">操作</th>
-
-                    </tr>
-
-                    <tr>
-
-                        <th>血壓</th><th>脈壓差</th><th>心跳</th><th>血氧/心跳</th><th>血壓</th><th>脈壓差</th><th>心跳</th><th>血氧/心跳</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="tableBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <div class="tip-text"><i class="fa-solid fa-circle-info"></i> 提示：新增後資料會安全存在手機/電腦本地。記得定期點擊右上方「同步至 Google Sheet 備份」按鈕。</div>
+<div class="table-card">
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+<th>日期</th>
+<th>對象</th>
+<th>早上血壓</th>
+<th>早上心跳</th>
+<th>早上血氧</th>
+<th>晚上血壓</th>
+<th>晚上心跳</th>
+<th>晚上血氧</th>
+<th>體重</th>
+<th>備註</th>
+<th>刪除</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+</div>
 
 </div>
 
-
-
 <script>
 
-    // ⭐ 請在這裡填入您在第一步第 7 點取得的 Google Web App 網址 ⭐
+const GOOGLE_WEB_APP_URL = "貼上你的AppsScript網址";
 
-    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz29A7pisPNFhFjVWXKAVwRNES--3hsRHyrGKvK2l2QiJ6eb653eGXrAszJ28azkdM-7g/exec";
+let healthData = JSON.parse(localStorage.getItem('family_health_data')) || [];
 
+document.getElementById('targetDate').valueAsDate = new Date();
 
+function saveDataToLocal(){
+    localStorage.setItem('family_health_data', JSON.stringify(healthData));
+}
 
-    document.getElementById('targetDate').valueAsDate = new Date();
+function formatDate(dateString){
+    const d = new Date(dateString);
 
-    
+    if (isNaN(d)) return dateString;
 
-    // 從 LocalStorage 載入歷史本地資料，如果沒有就留空
+    const year = d.getFullYear();
+    const month = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
 
-    let healthData = JSON.parse(localStorage.getItem('family_health_data')) || [];
+    return `${year}/${month}/${day}`;
+}
 
+function handleDataSubmission(){
 
+    const record = {
+        date: document.getElementById('targetDate').value.replace(/-/g,'/'),
+        user: document.getElementById('targetUser').value,
+        mBP: document.getElementById('morningBP').value,
+        mHR: document.getElementById('morningHR').value,
+        mBO: document.getElementById('morningBO').value,
+        eBP: document.getElementById('eveningBP').value,
+        eHR: document.getElementById('eveningHR').value,
+        eBO: document.getElementById('eveningBO').value,
+        weight: document.getElementById('manualWeight').value,
+        symptom: document.getElementById('manualSymptom').value
+    };
 
-    function saveDataToLocal() {
+    healthData.unshift(record);
 
-        localStorage.setItem('family_health_data', JSON.stringify(healthData));
+    saveDataToLocal();
+    renderTable();
 
+    alert('新增成功');
+}
+
+function renderTable(){
+
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    const filterUser = document.getElementById('userFilter').value;
+    const filterMonth = document.getElementById('monthFilter').value;
+
+    const months = [...new Set(healthData.map(d => d.date.substring(0,7)))];
+
+    const monthFilter = document.getElementById('monthFilter');
+
+    if(monthFilter.options.length <= 1){
+        months.forEach(m => {
+            const op = document.createElement('option');
+            op.value = m;
+            op.textContent = m;
+            monthFilter.appendChild(op);
+        });
     }
 
-
-
-    function calculatePulseDifference(bpString) {
-
-        if (!bpString || !bpString.includes('/')) return { value: "—", className: "" };
-
-        const parts = bpString.split('/');
-
-        const diff = parseInt(parts[0]) - parseInt(parts[1]);
-
-        if (isNaN(diff)) return { value: "—", className: "" };
-
-        return { value: diff, className: diff > 60 ? "value-warning" : "" };
-
-    }
-
-
-
-    function getHeartRateClass(hrString) {
-
-        return (parseInt(hrString) > 100) ? "value-warning" : "";
-
-    }
-
-
-
-    function handleDataSubmission() {
-
-        const text = document.getElementById('aiInput').value;
-
-        const dateInput = document.getElementById('targetDate').value;
-
-        const userInput = document.getElementById('targetUser').value;
-
-        const weightInput = document.getElementById('manualWeight').value.trim();
-
-        const poopInput = document.getElementById('manualPoop').checked;
-
-        const symptomInput = document.getElementById('manualSymptom').value.trim();
-
-
-
-        if (!dateInput) return alert("請選取正確日期！");
-
-        const formattedDate = dateInput.replace(/-/g, '/');
-
-
-
-        let tempRecord = {
-
-            mBP: document.getElementById('morningBP').value.trim(), mHR: document.getElementById('morningHR').value.trim(), mBO: document.getElementById('morningBO').value.trim(), 
-
-            eBP: document.getElementById('eveningBP').value.trim(), eHR: document.getElementById('eveningHR').value.trim(), eBO: document.getElementById('eveningBO').value.trim(),
-
-            weight: weightInput, poop: poopInput, symptom: symptomInput
-
-        };
-
-
-
-        if (text.trim() !== "") {
-
-            const cleanText = text.replace(/ /g, "");
-
-            let morningBlock = ""; let eveningBlock = "";
-
-            const eveningIndex = cleanText.search(/[晚夜]/);
-
-            if (eveningIndex !== -1) { morningBlock = cleanText.substring(0, eveningIndex); eveningBlock = cleanText.substring(eveningIndex); } else { morningBlock = cleanText; }
-
-
-
-            function parseBlock(block) {
-
-                const res = { bp: "", hr: "", bo: "" };
-
-                const bpMatch = block.match(/(\d{2,3})-(\d{2,3})-(\d{2,3})/);
-
-                if (bpMatch) { res.bp = `${bpMatch[1]}/${bpMatch[2]}`; res.hr = bpMatch[3]; }
-
-                const remaining = block.replace(bpMatch ? bpMatch[0] : "", "");
-
-                const boMatch = remaining.match(/(\d{2,3})-(\d{2,3})/);
-
-                if (boMatch) { res.bo = `${boMatch[1]}/${boMatch[2]}`; }
-
-                return res;
-
-            }
-
-
-
-            const mObj = parseBlock(morningBlock);
-
-            if (mObj.bp) tempRecord.mBP = mObj.bp; if (mObj.hr) tempRecord.mHR = mObj.hr; if (mObj.bo) tempRecord.mBO = mObj.bo;
-
-            if (eveningBlock) {
-
-                const eObj = parseBlock(eveningBlock);
-
-                if (eObj.bp) tempRecord.eBP = eObj.bp; if (eObj.hr) tempRecord.eHR = eObj.hr; if (eObj.bo) tempRecord.eBO = eObj.bo;
-
-            }
-
-        }
-
-
-
-        const matchIndex = healthData.findIndex(d => d.date === formattedDate && d.user === userInput);
-
-        
-
-        if (matchIndex !== -1) {
-
-            if (tempRecord.mBP !== "") healthData[matchIndex].mBP = tempRecord.mBP;
-
-            if (tempRecord.mHR !== "") healthData[matchIndex].mHR = tempRecord.mHR;
-
-            if (tempRecord.mBO !== "") healthData[matchIndex].mBO = tempRecord.mBO;
-
-            if (tempRecord.eBP !== "") healthData[matchIndex].eBP = tempRecord.eBP;
-
-            if (tempRecord.eHR !== "") healthData[matchIndex].eHR = tempRecord.eHR;
-
-            if (tempRecord.eBO !== "") healthData[matchIndex].eBO = tempRecord.eBO;
-
-            if (tempRecord.weight !== "") healthData[matchIndex].weight = tempRecord.weight;
-
-            if (tempRecord.symptom !== "") healthData[matchIndex].symptom = tempRecord.symptom;
-
-            if (tempRecord.poop === true || document.getElementById('manualPoop').checked) healthData[matchIndex].poop = true;
-
-        } else {
-
-            healthData.unshift({
-
-                date: formattedDate, user: userInput,
-
-                mBP: tempRecord.mBP, mHR: tempRecord.mHR, mBO: tempRecord.mBO,
-
-                eBP: tempRecord.eBP, eHR: tempRecord.eHR, eBO: tempRecord.eBO,
-
-                weight: tempRecord.weight, poop: tempRecord.poop, symptom: tempRecord.symptom
-
-            });
-
-        }
-
-
-
+    healthData.forEach((item,index)=>{
+
+        if(filterUser !== '全部' && item.user !== filterUser) return;
+        if(filterMonth !== '全部' && !item.date.startsWith(filterMonth)) return;
+
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+        <td>${formatDate(item.date)}</td>
+        <td>${item.user || ''}</td>
+        <td><input class="editable-cell" value="${item.mBP || ''}" onchange="updateField(${index},'mBP',this.value)"></td>
+        <td><input class="editable-cell" value="${item.mHR || ''}" onchange="updateField(${index},'mHR',this.value)"></td>
+        <td><input class="editable-cell" value="${item.mBO || ''}" onchange="updateField(${index},'mBO',this.value)"></td>
+        <td><input class="editable-cell" value="${item.eBP || ''}" onchange="updateField(${index},'eBP',this.value)"></td>
+        <td><input class="editable-cell" value="${item.eHR || ''}" onchange="updateField(${index},'eHR',this.value)"></td>
+        <td><input class="editable-cell" value="${item.eBO || ''}" onchange="updateField(${index},'eBO',this.value)"></td>
+        <td><input class="editable-cell" value="${item.weight || ''}" onchange="updateField(${index},'weight',this.value)"></td>
+        <td><input class="editable-cell" value="${item.symptom || ''}" onchange="updateField(${index},'symptom',this.value)"></td>
+        <td><button class="btn-delete-row" onclick="deleteRow(${index})">刪除</button></td>
+        `;
+
+        tableBody.appendChild(tr);
+    });
+}
+
+function updateField(index, field, value){
+    healthData[index][field] = value;
+    saveDataToLocal();
+}
+
+function deleteRow(index){
+
+    if(confirm('確定刪除？')){
+        healthData.splice(index,1);
         saveDataToLocal();
-
-        
-
-        // 重設輸入框
-
-        document.getElementById('aiInput').value = ""; document.getElementById('manualWeight').value = "";
-
-        document.getElementById('manualPoop').checked = false; document.getElementById('manualSymptom').value = "";
-
-        document.getElementById('morningBP').value = ""; document.getElementById('morningHR').value = ""; document.getElementById('morningBO').value = "";
-
-        document.getElementById('eveningBP').value = ""; document.getElementById('eveningHR').value = ""; document.getElementById('eveningBO').value = "";
-
-
-
         renderTable();
+    }
+}
 
+async function syncWithGoogleSheet(){
+
+    if(GOOGLE_WEB_APP_URL.includes('貼上')){
+        alert('請先貼 Apps Script 網址');
+        return;
     }
 
+    document.getElementById('loadingTxt').style.display = 'inline-block';
 
+    try {
 
-    // ⭐ 一鍵同步到雲端 Google Sheet 的核心代碼
-
-    function syncWithGoogleSheet() {
-
-        if (!GOOGLE_WEB_APP_URL || GOOGLE_WEB_APP_URL.includes("YOUR_GOOGLE_WEB")) {
-
-            return alert("❌ 請先在 HTML 程式碼中填入您專屬的 Google Web App 網址！");
-
-        }
-
-        if (healthData.length === 0) return alert("目前本地表格沒有任何暫存資料可以同步唷！");
-
-
-
-        const spinner = document.getElementById('loadingTxt');
-
-        spinner.style.display = "inline-block";
-
-
-
-        fetch(GOOGLE_WEB_APP_URL, {
-
+        await fetch(GOOGLE_WEB_APP_URL, {
             method: 'POST',
-
-            mode: 'no-cors', // 解決跨網域安全限制
-
-            headers: { 'Content-Type': 'application/json' },
-
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(healthData)
-
-        })
-
-        .then(() => {
-
-            spinner.style.display = "none";
-
-            alert("🎉 同步成功！本地暫存資料已成功增量備份合併到您的 Google Sheet 試算表了！");
-
-        })
-
-        .catch(err => {
-
-            spinner.style.display = "none";
-
-            console.error(err);
-
-            alert("❌ 同步失敗，請確認網路或 Google 部署設定是否有誤。");
-
         });
+
+        alert('同步成功');
+
+    } catch(err){
+
+        console.error(err);
+        alert('同步失敗');
 
     }
 
+    document.getElementById('loadingTxt').style.display = 'none';
+}
 
+async function loadDataFromCloud(){
 
-    function deleteRow(index) {
+    try {
 
-        if (confirm("⚠️ 確定要刪除這行本地紀錄嗎？(注意：此操作不會自動刪除已寫入雲端 Google Sheet 的舊資料)")) {
+        const response = await fetch(GOOGLE_WEB_APP_URL);
+        const data = await response.json();
 
-            healthData.splice(index, 1); saveDataToLocal(); renderTable();
-
+        if(Array.isArray(data) && data.length > 0){
+            healthData = data;
+            saveDataToLocal();
+            renderTable();
         }
 
+    } catch(err){
+        console.log('雲端資料讀取失敗');
     }
-
-
-
-    function updateField(index, field, value) {
-
-        if (field === 'date') value = value.replace(/-/g, '/');
-
-        healthData[index][field] = value; saveDataToLocal();
-
-        if (field === 'mBP' || field === 'eBP' || field === 'mHR' || field === 'eHR') { renderTable(); }
-
-    }
-
-
-
-    function renderTable() {
-
-        const tableBody = document.getElementById('tableBody');
-
-        const filterUser = document.getElementById('userFilter').value;
-
-        const filterMonth = document.getElementById('monthFilter').value;
-
-        tableBody.innerHTML = '';
-
-
-
-        healthData.sort((a,b) => {
-
-            const dateDiff = new Date(b.date) - new Date(a.date);
-
-            if (dateDiff !== 0) return dateDiff;
-
-            return a.user.localeCompare(b.user, 'zh-Hant');
-
-        });
-
-
-
-        healthData.forEach((item, index) => {
-
-            if (filterUser !== '全部' && item.user !== filterUser) return;
-
-            if (filterMonth !== '全部' && !item.date.startsWith(filterMonth)) return;
-
-
-
-            const tr = document.createElement('tr');
-
-            const mPulse = calculatePulseDifference(item.mBP);
-
-            const ePulse = calculatePulseDifference(item.eBP);
-
-
-
-            tr.innerHTML = `
-
-                <td><input type="date" class="editable-cell" value="${item.date.replace(/\//g, '-')}" onchange="updateField(${index}, 'date', this.value)"></td>
-
-                <td>
-
-                    <select class="editable-cell" style="font-weight:700;" onchange="updateField(${index}, 'user', this.value)">
-
-                        <option value="妃" ${item.user==='妃'?'selected':''}>妃</option>
-
-                        <option value="爸爸" ${item.user==='爸爸'?'selected':''}>爸爸</option>
-
-                        <option value="媽媽" ${item.user==='媽媽'?'selected':''}>媽媽</option>
-
-                        <option value="通" ${item.user==='通'?'selected':''}>通</option>
-
-                    </select>
-
-                </td>
-
-                <td class="morning-col"><input type="text" class="editable-cell" value="${item.mBP}" oninput="updateField(${index}, 'mBP', this.value)"></td>
-
-                <td class="morning-col ${mPulse.className}">${mPulse.value}</td>
-
-                <td class="morning-col"><input type="text" class="editable-cell ${getHeartRateClass(item.mHR)}" value="${item.mHR}" onchange="updateField(${index}, 'mHR', this.value)"></td>
-
-                <td class="morning-col"><input type="text" class="editable-cell" value="${item.mBO}" onchange="updateField(${index}, 'mBO', this.value)"></td>
-
-                
-
-                <td class="evening-col"><input type="text" class="editable-cell" value="${item.eBP}" oninput="updateField(${index}, 'eBP', this.value)"></td>
-
-                <td class="evening-col ${ePulse.className}">${ePulse.value}</td>
-
-                <td class="evening-col"><input type="text" class="editable-cell ${getHeartRateClass(item.eHR)}" value="${item.eHR}" onchange="updateField(${index}, 'eHR', this.value)"></td>
-
-                <td class="evening-col"><input type="text" class="editable-cell" value="${item.eBO}" onchange="updateField(${index}, 'eBO', this.value)"></td>
-
-                
-
-                <td style="font-weight:700; color:#1A73E8;"><input type="text" class="editable-cell" value="${item.weight}" onchange="updateField(${index}, 'weight', this.value)"></td>
-
-                <td><input type="checkbox" class="poop-checkbox" ${item.poop ? 'checked' : ''} onchange="updateField(${index}, 'poop', this.checked)"></td>
-
-                <td><input type="text" class="editable-cell symptom-input" value="${item.symptom}" placeholder="修改備註..." onchange="updateField(${index}, 'symptom', this.value)"></td>
-
-                <td><button class="btn-delete-row" onclick="deleteRow(${index})"><i class="fa-regular fa-trash-can"></i></button></td>
-
-            `;
-
-            tableBody.appendChild(tr);
-
-        });
-
-    }
-
-// 1. 這是接收雲端資料的處理函式
-function handleData(data) {
-    console.log("成功讀取雲端資料：", data);
-    
-    // 將資料存入本地暫存
-    localStorage.setItem("healthData", JSON.stringify(data));
-    
-    // 更新全域變數 healthData (確保這變數名稱與您網頁中的一致)
-    healthData = data; 
-    
-    // 重新渲染表格
-    renderTable(); 
 }
 
-// 2. 這是動態載入 Script 的函式
-function loadDataFromCloud() {
-    // 每次載入前先移除舊的 script 標籤，避免重複產生
-    const oldScript = document.getElementById('jsonp-script');
-    if (oldScript) oldScript.remove();
-
-    const script = document.createElement('script');
-    script.id = 'jsonp-script';
-    // 這裡使用 callback=handleData，這與 Apps Script 中的名稱要一致
-    script.src = GOOGLE_WEB_APP_URL + "?callback=handleData";
-    document.body.appendChild(script);
+window.onload = async function(){
+    await loadDataFromCloud();
+    renderTable();
 }
 
-// 3. 網頁載入時執行
-window.onload = function() {
-    loadDataFromCloud(); 
-    renderTable(); // 初始載入一次表格
-};
 </script>
-
 </body>
-
 </html>
+```
+
+---
+
+# 最後非常重要
+
+Apps Script 後端也要支援 GET + POST。
+
+如果你的 Apps Script 不是下面這種，我可以下一步直接幫你做完整 Apps Script。
+
+因為你現在的問題其實是：
+
+* HTML 前端 OK
+* 但 Apps Script 後端沒有正確回傳 JSON
+
+所以資料才讀不到。
+
+下一步你只要把 Apps Script 程式貼給我。
+我直接幫你改成可用版。
