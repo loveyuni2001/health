@@ -871,7 +871,33 @@
 
     }
 
+// ⭐ 新增這段：網頁一開啟，自動從 Google Sheet 抓資料 ⭐
+async function loadDataFromCloud() {
+    const spinner = document.getElementById('loadingTxt');
+    spinner.style.display = "inline-block";
+    spinner.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 雲端讀取中...';
 
+    try {
+        // 在網址後加上 ?action=get 讓 Google Apps Script 知道要「讀取」
+        const response = await fetch(GOOGLE_WEB_APP_URL + "?action=get");
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+            healthData = data;
+            saveDataToLocal(); // 更新本地暫存
+            renderTable();     // 重新渲染畫面
+        }
+    } catch (err) {
+        console.warn("無法從雲端自動讀取，使用本地暫存資料：", err);
+    } finally {
+        spinner.style.display = "none";
+    }
+}
+
+// 網頁載入時執行
+window.onload = function() {
+    loadDataFromCloud(); 
+};
 
     renderTable();
 
