@@ -871,27 +871,38 @@
 
     }
 
+// 1. 這是接收雲端資料的處理函式
+function handleData(data) {
+    console.log("成功讀取雲端資料：", data);
+    
+    // 將資料存入本地暫存
+    localStorage.setItem("healthData", JSON.stringify(data));
+    
+    // 更新全域變數 healthData (確保這變數名稱與您網頁中的一致)
+    healthData = data; 
+    
+    // 重新渲染表格
+    renderTable(); 
+}
+
+// 2. 這是動態載入 Script 的函式
 function loadDataFromCloud() {
-    // 這裡我們不使用 fetch，而是動態建立 script 標籤 (JSONP 的原理)
-    var script = document.createElement('script');
+    // 每次載入前先移除舊的 script 標籤，避免重複產生
+    const oldScript = document.getElementById('jsonp-script');
+    if (oldScript) oldScript.remove();
+
+    const script = document.createElement('script');
+    script.id = 'jsonp-script';
+    // 這裡使用 callback=handleData，這與 Apps Script 中的名稱要一致
     script.src = GOOGLE_WEB_APP_URL + "?callback=handleData";
     document.body.appendChild(script);
 }
 
-// 這是接收雲端資料的處理函式
-function handleData(data) {
-    console.log("成功讀取雲端資料：", data);
-    localStorage.setItem("healthData", JSON.stringify(data));
-    renderTable(); // 重新渲染表格
-}
-
-// 網頁載入時執行
+// 3. 網頁載入時執行
 window.onload = function() {
     loadDataFromCloud(); 
+    renderTable(); // 初始載入一次表格
 };
-
-    renderTable();
-
 </script>
 
 </body>
