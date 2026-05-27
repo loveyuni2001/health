@@ -871,27 +871,18 @@
 
     }
 
-// ⭐ 新增這段：網頁一開啟，自動從 Google Sheet 抓資料 ⭐
-async function loadDataFromCloud() {
-    const spinner = document.getElementById('loadingTxt');
-    spinner.style.display = "inline-block";
-    spinner.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 雲端讀取中...';
+function loadDataFromCloud() {
+    // 這裡我們不使用 fetch，而是動態建立 script 標籤 (JSONP 的原理)
+    var script = document.createElement('script');
+    script.src = GOOGLE_WEB_APP_URL + "?callback=handleData";
+    document.body.appendChild(script);
+}
 
-    try {
-        // 在網址後加上 ?action=get 讓 Google Apps Script 知道要「讀取」
-        const response = await fetch(GOOGLE_WEB_APP_URL + "?action=get");
-        const data = await response.json();
-        
-        if (data && data.length > 0) {
-            healthData = data;
-            saveDataToLocal(); // 更新本地暫存
-            renderTable();     // 重新渲染畫面
-        }
-    } catch (err) {
-        console.warn("無法從雲端自動讀取，使用本地暫存資料：", err);
-    } finally {
-        spinner.style.display = "none";
-    }
+// 這是接收雲端資料的處理函式
+function handleData(data) {
+    console.log("成功讀取雲端資料：", data);
+    localStorage.setItem("healthData", JSON.stringify(data));
+    renderTable(); // 重新渲染表格
 }
 
 // 網頁載入時執行
