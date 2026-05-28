@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,7 +11,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
@@ -24,8 +22,8 @@
     --sub:#5F6368;
     --danger:#D93025;
     --green:#188038;
-    --morning:#E8F0FE;
-    --evening:#FDF7E7;
+    --blue:#E8F0FE;
+    --yellow:#FDF7E7;
 }
 
 *{
@@ -55,9 +53,9 @@ body{
     align-items:center;
     gap:12px;
     flex-wrap:wrap;
-    margin-bottom:20px;
     border-bottom:3px solid var(--black);
-    padding-bottom:14px;
+    padding-bottom:12px;
+    margin-bottom:20px;
 }
 
 .title-group h1{
@@ -67,7 +65,7 @@ body{
 }
 
 .title-group p{
-    margin:4px 0 0 0;
+    margin:2px 0 0;
     font-size:12px;
     color:var(--sub);
     font-weight:700;
@@ -79,48 +77,48 @@ body{
     gap:10px;
 }
 
-.btn-sync-cloud{
-    border:none;
+.btn-sync{
     background:var(--green);
     color:#fff;
-    padding:10px 16px;
-    border-radius:999px;
-    font-weight:700;
-    cursor:pointer;
     border:2px solid var(--black);
+    border-radius:30px;
+    padding:10px 18px;
+    cursor:pointer;
+    font-weight:700;
     box-shadow:0 3px 0 var(--black);
 }
 
-.loading-spinner{
-    display:none;
-    color:var(--green);
-    font-size:13px;
-    font-weight:700;
+.btn-sync:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 var(--black);
 }
 
-/* TOP GRID */
+.loading{
+    display:none;
+    font-size:13px;
+    font-weight:700;
+    color:var(--green);
+}
 
-.double-entry-wrapper{
+/* GRID */
+
+.double-wrapper{
     display:grid;
-    grid-template-columns:1fr 1.2fr;
+    grid-template-columns:1fr;
     gap:20px;
     margin-bottom:25px;
 }
 
-@media(max-width:900px){
-
-    .double-entry-wrapper{
-        grid-template-columns:1fr;
+@media(min-width:992px){
+    .double-wrapper{
+        grid-template-columns:1fr 1.2fr;
     }
-
 }
 
-/* CARD */
-
-.entry-card{
-    background:var(--white);
+.card{
+    background:#fff;
     border:2px solid var(--black);
-    border-radius:18px;
+    border-radius:16px;
     padding:20px;
     position:relative;
 }
@@ -132,55 +130,43 @@ body{
     background:var(--black);
     color:#fff;
     font-size:11px;
-    padding:4px 12px;
-    border-radius:999px;
+    padding:3px 12px;
+    border-radius:30px;
     font-weight:700;
 }
 
 .box-title{
-    margin-top:6px;
-    margin-bottom:16px;
     font-size:16px;
     font-weight:700;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    margin-bottom:15px;
 }
 
 /* TEXTAREA */
 
 .ai-textarea{
     width:100%;
-    min-height:170px;
-    resize:none;
+    min-height:180px;
     border:2px solid var(--black);
-    border-radius:14px;
+    border-radius:12px;
     padding:12px;
+    resize:none;
     font-size:14px;
-    outline:none;
     background:#FAFAFA;
+    line-height:1.5;
 }
 
 /* FORM */
 
-.right-form-grid{
+.form-grid{
     display:grid;
     grid-template-columns:repeat(6,1fr);
     gap:10px;
 }
 
-@media(max-width:768px){
-
-    .right-form-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
 .input-group{
     display:flex;
     flex-direction:column;
-    gap:5px;
+    gap:4px;
 }
 
 .input-group label{
@@ -196,72 +182,46 @@ body{
     padding:8px 10px;
     font-size:14px;
     font-weight:600;
-    outline:none;
     background:#fff;
 }
 
-.sub-section-title{
+.sub-title{
     grid-column:span 6;
-    padding:8px;
+    padding:6px 10px;
     border-radius:8px;
     font-size:13px;
     font-weight:700;
 }
 
-.title-morning{
-    background:var(--morning);
+.morning-title{
+    background:var(--blue);
     color:#1A73E8;
 }
 
-.title-evening{
-    background:var(--evening);
+.evening-title{
+    background:var(--yellow);
     color:#B06000;
 }
 
-@media(max-width:768px){
-
-    .sub-section-title{
-        grid-column:span 2;
-    }
-
-}
-
-.poop-switch-container{
+.poop-box{
     height:42px;
+    border:2px solid var(--black);
+    border-radius:12px;
     display:flex;
     justify-content:center;
     align-items:center;
-    border:2px solid var(--black);
-    border-radius:12px;
-    background:#fff;
 }
 
-.main-checkbox{
-    width:18px;
-    height:18px;
-}
-
-.btn-submit-container{
+.btn-submit{
     grid-column:span 6;
-}
-
-@media(max-width:768px){
-
-    .btn-submit-container{
-        grid-column:span 2;
-    }
-
-}
-
-.btn-ai{
-    width:100%;
+    height:48px;
     border:none;
+    border-radius:12px;
     background:var(--black);
     color:#fff;
-    border-radius:12px;
-    padding:13px;
     font-weight:700;
     cursor:pointer;
+    font-size:15px;
 }
 
 /* TOOLBAR */
@@ -270,31 +230,31 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
+    gap:12px;
     flex-wrap:wrap;
-    margin-bottom:15px;
     border-top:3px solid var(--black);
     padding-top:15px;
+    margin-bottom:15px;
 }
 
 .filter-container{
     display:flex;
-    gap:10px;
+    gap:8px;
     flex-wrap:wrap;
 }
 
-.select-box-wrapper{
-    border:2px solid var(--black);
-    border-radius:999px;
-    padding:5px 12px;
+.filter-box{
     background:#fff;
+    border:2px solid var(--black);
+    border-radius:30px;
+    padding:5px 12px;
 }
 
 .filter-select{
     border:none;
-    background:transparent;
+    background:none;
     font-weight:700;
-    outline:none;
+    cursor:pointer;
 }
 
 /* TABLE */
@@ -302,7 +262,7 @@ body{
 .table-card{
     background:#fff;
     border:2px solid var(--black);
-    border-radius:18px;
+    border-radius:16px;
     overflow:hidden;
 }
 
@@ -312,7 +272,7 @@ body{
 
 table{
     width:100%;
-    min-width:1300px;
+    min-width:1250px;
     border-collapse:separate;
     border-spacing:0;
     text-align:center;
@@ -321,79 +281,96 @@ table{
 th{
     background:var(--black);
     color:#fff;
-    padding:12px 8px;
-    font-size:13px;
-    border-right:1px solid #444;
+    padding:10px 8px;
+    font-size:14px;
+    border-right:2px solid #333;
 }
 
 td{
-    background:#fff;
     padding:8px;
-    border-right:1px solid #EAEAEA;
-    border-bottom:1px solid #EAEAEA;
+    border-right:2px solid #fff;
+    border-bottom:2px solid #fff;
+    background:#F8F8F8;
 }
 
 .morning-col{
-    background:var(--morning);
+    background:var(--blue);
 }
 
 .evening-col{
-    background:var(--evening);
+    background:var(--yellow);
 }
 
-.editable-cell{
+.editable{
     width:100%;
     border:2px solid transparent;
-    border-radius:8px;
-    padding:5px;
     background:transparent;
+    padding:4px;
+    border-radius:6px;
+    font-size:14px;
     text-align:center;
     font-weight:700;
-    outline:none;
 }
 
-.editable-cell:focus{
+.editable:focus{
     border:2px solid var(--black);
     background:#fff;
 }
 
-.symptom-input{
-    text-align:left;
+.warning{
+    color:var(--danger);
+    font-weight:800;
+    background:rgba(217,48,37,.15);
+    border-radius:4px;
+    padding:3px 6px;
 }
 
-.poop-checkbox{
-    width:18px;
-    height:18px;
-}
-
-.value-warning{
-    color:var(--danger) !important;
-    font-weight:800 !important;
-    background:rgba(217,48,37,.12);
-    border-radius:6px;
-}
-
-.btn-delete-row{
+.delete-btn{
     border:none;
-    background:transparent;
-    cursor:pointer;
+    background:none;
     color:#777;
+    cursor:pointer;
 }
 
-.btn-delete-row:hover{
+.delete-btn:hover{
     color:var(--danger);
 }
 
-.tip-text{
+.tip{
     text-align:center;
+    color:var(--sub);
     margin-top:15px;
     font-size:12px;
-    color:var(--sub);
     font-weight:700;
 }
 
-</style>
+/* MOBILE */
 
+@media(max-width:576px){
+
+    .form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .full-mobile{
+        grid-column:span 2 !important;
+    }
+
+    .sub-title{
+        grid-column:span 2 !important;
+    }
+
+    .btn-submit{
+        grid-column:span 2 !important;
+    }
+
+    .portal-header{
+        align-items:flex-start;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
@@ -402,30 +379,32 @@ td{
 
 <div class="portal-header">
 
-    <div class="title-group">
-        <h1>全家人健康智慧導航站</h1>
-        <p>Family Health Intelligence Cloud Portal</p>
-    </div>
+<div class="title-group">
+<h1>全家人健康智慧導航站</h1>
+<p>Family Health Intelligence Cloud Portal</p>
+</div>
 
-    <div class="sync-btn-container">
+<div class="sync-btn-container">
 
-        <span id="loadingTxt" class="loading-spinner">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            雲端同步中...
-        </span>
+<span class="loading" id="loadingTxt">
+<i class="fa-solid fa-spinner fa-spin"></i>
+同步中...
+</span>
 
-        <button class="btn-sync-cloud" onclick="syncWithGoogleSheet()">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            同步至 Google Sheet 備份
-        </button>
-
-    </div>
+<button class="btn-sync" onclick="syncGoogleSheet()">
+<i class="fa-solid fa-cloud-arrow-up"></i>
+同步 Google Sheet
+</button>
 
 </div>
 
-<div class="double-entry-wrapper">
+</div>
 
-<div class="entry-card">
+<div class="double-wrapper">
+
+<!-- LEFT -->
+
+<div class="card">
 
 <div class="step-label">01 智慧解析</div>
 
@@ -434,11 +413,20 @@ td{
 LINE 文字全解析
 </div>
 
-<textarea id="aiInput" class="ai-textarea" placeholder="在此貼上 LINE 辨識文字..."></textarea>
+<textarea
+id="aiInput"
+class="ai-textarea"
+placeholder="貼上 LINE 文字，例如：
+
+早上 112-79-84 97-75
+晚上 131-76-99 96-95
+"></textarea>
 
 </div>
 
-<div class="entry-card">
+<!-- RIGHT -->
+
+<div class="card">
 
 <div class="step-label">02 手動紀錄 / 微調區</div>
 
@@ -447,14 +435,14 @@ LINE 文字全解析
 基礎設定與健康指標填寫
 </div>
 
-<div class="right-form-grid">
+<div class="form-grid">
 
-<div class="input-group" style="grid-column:span 2;">
+<div class="input-group full-mobile" style="grid-column:span 2;">
 <label>設定日期</label>
 <input type="date" id="targetDate" class="form-control">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>記錄對象</label>
 <select id="targetUser" class="form-control">
 <option value="妃">妃</option>
@@ -464,21 +452,21 @@ LINE 文字全解析
 </select>
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 1;">
 <label>體重</label>
 <input type="text" id="manualWeight" class="form-control" placeholder="57.7">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 1;">
 <label>排便</label>
 
-<div class="poop-switch-container">
-<input type="checkbox" id="manualPoop" class="main-checkbox">
+<div class="poop-box">
+<input type="checkbox" id="manualPoop">
 </div>
 
 </div>
 
-<div class="sub-section-title title-morning">
+<div class="sub-title morning-title">
 <i class="fa-solid fa-sun"></i>
 【早上】指標
 </div>
@@ -493,12 +481,12 @@ LINE 文字全解析
 <input type="text" id="morningHR" class="form-control" placeholder="84">
 </div>
 
-<div class="input-group" style="grid-column:span 2;">
+<div class="input-group full-mobile" style="grid-column:span 2;">
 <label>早上血氧/心跳</label>
 <input type="text" id="morningBO" class="form-control" placeholder="97/75">
 </div>
 
-<div class="sub-section-title title-evening">
+<div class="sub-title evening-title">
 <i class="fa-solid fa-moon"></i>
 【晚上】指標
 </div>
@@ -513,22 +501,17 @@ LINE 文字全解析
 <input type="text" id="eveningHR" class="form-control" placeholder="99">
 </div>
 
-<div class="input-group" style="grid-column:span 2;">
+<div class="input-group full-mobile" style="grid-column:span 2;">
 <label>晚上血氧/心跳</label>
 <input type="text" id="eveningBO" class="form-control" placeholder="96/95">
 </div>
 
-<div class="input-group" style="grid-column:span 6;">
-
+<div class="input-group full-mobile" style="grid-column:span 6;">
 <label>症狀與服藥備註</label>
-
 <input type="text" id="manualSymptom" class="form-control" placeholder="特殊狀況備註...">
-
 </div>
 
-<div class="btn-submit-container">
-
-<button class="btn-ai" onclick="handleDataSubmission()">
+<button class="btn-submit" onclick="handleDataSubmission()">
 <i class="fa-solid fa-plus"></i>
 確認新增至暫存表
 </button>
@@ -539,48 +522,40 @@ LINE 文字全解析
 
 </div>
 
-</div>
+<!-- TOOLBAR -->
 
 <div class="toolbar">
 
-<div style="font-size:16px;font-weight:700;">
+<div style="font-weight:700;">
 <i class="fa-solid fa-table-list"></i>
-03 當機紀錄異動台
+03 當前紀錄
 </div>
 
 <div class="filter-container">
 
-<div class="select-box-wrapper">
-
-<label>看成員：</label>
-
+<div class="filter-box">
+<label>成員：</label>
 <select id="userFilter" class="filter-select" onchange="renderTable()">
-
 <option value="全部">全部</option>
 <option value="妃">妃</option>
 <option value="爸爸">爸爸</option>
 <option value="媽媽">媽媽</option>
 <option value="通">通</option>
-
 </select>
-
 </div>
 
-<div class="select-box-wrapper">
-
+<div class="filter-box">
 <label>月份：</label>
-
 <select id="monthFilter" class="filter-select" onchange="renderTable()">
-
 <option value="全部">全部</option>
-
 </select>
-
 </div>
 
 </div>
 
 </div>
+
+<!-- TABLE -->
 
 <div class="table-card">
 
@@ -591,18 +566,17 @@ LINE 文字全解析
 <thead>
 
 <tr>
-
 <th rowspan="2">日期</th>
 <th rowspan="2">對象</th>
 
 <th colspan="4">【早上】紀錄</th>
+
 <th colspan="4">【晚上】紀錄</th>
 
 <th rowspan="2">體重</th>
 <th rowspan="2">排便</th>
 <th rowspan="2">症狀與服藥備註</th>
 <th rowspan="2">操作</th>
-
 </tr>
 
 <tr>
@@ -629,57 +603,124 @@ LINE 文字全解析
 
 </div>
 
-<div class="tip-text">
-<i class="fa-solid fa-circle-info"></i>
-資料會存在本地與 Google Sheet
+<div class="tip">
+資料會先存在本地，再同步到 Google Sheet
 </div>
 
 </div>
 
 <script>
 
-const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz29A7pisPNFhFjVWXKAVwRNES--3hsRHyrGKvK2l2QiJ6eb653eGXrAszJ28azkdM-7g/exec";
+const GOOGLE_WEB_APP_URL =
+"https://script.google.com/macros/s/AKfycbz29A7pisPNFhFjVWXKAVwRNES--3hsRHyrGKvK2l2QiJ6eb653eGXrAszJ28azkdM-7g/exec";
 
 document.getElementById('targetDate').valueAsDate = new Date();
 
-let healthData = JSON.parse(localStorage.getItem('family_health_data')) || [];
+let healthData =
+JSON.parse(localStorage.getItem('family_health_data')) || [];
 
-function saveData(){
-    localStorage.setItem('family_health_data',JSON.stringify(healthData));
+function saveLocal(){
+    localStorage.setItem(
+        'family_health_data',
+        JSON.stringify(healthData)
+    );
 }
 
-function calculatePulse(bp){
+function pulseDiff(bp){
 
     if(!bp || !bp.includes('/')){
-        return {
-            value:'—',
-            className:''
-        };
+        return {value:'—', className:''};
     }
 
-    const parts = bp.split('/');
+    const arr = bp.split('/');
 
-    const diff = parseInt(parts[0]) - parseInt(parts[1]);
+    const diff =
+        parseInt(arr[0]) -
+        parseInt(arr[1]);
+
+    if(isNaN(diff)){
+        return {value:'—', className:''};
+    }
 
     return {
         value:diff,
-        className: diff > 60 ? 'value-warning' : ''
+        className: diff > 60 ? 'warning' : ''
     };
 
 }
 
-function getHeartClass(hr){
+function hrClass(hr){
 
-    return parseInt(hr) > 100 ? 'value-warning' : '';
+    return parseInt(hr) > 100
+        ? 'warning'
+        : '';
 
 }
 
+/* LINE 解析 */
+
+function parseText(){
+
+    const text =
+        document.getElementById('aiInput')
+        .value
+        .replace(/\s+/g,'');
+
+    if(!text) return;
+
+    const morning =
+        text.match(/早.*?(\d{2,3})-(\d{2,3})-(\d{2,3}).*?(\d{2,3})-(\d{2,3})/);
+
+    const evening =
+        text.match(/晚.*?(\d{2,3})-(\d{2,3})-(\d{2,3}).*?(\d{2,3})-(\d{2,3})/);
+
+    if(morning){
+
+        document.getElementById('morningBP').value =
+            morning[1] + '/' + morning[2];
+
+        document.getElementById('morningHR').value =
+            morning[3];
+
+        document.getElementById('morningBO').value =
+            morning[4] + '/' + morning[5];
+
+    }
+
+    if(evening){
+
+        document.getElementById('eveningBP').value =
+            evening[1] + '/' + evening[2];
+
+        document.getElementById('eveningHR').value =
+            evening[3];
+
+        document.getElementById('eveningBO').value =
+            evening[4] + '/' + evening[5];
+
+    }
+
+}
+
+document.getElementById('aiInput')
+.addEventListener('input', parseText);
+
+/* 新增 */
+
 function handleDataSubmission(){
 
-    const date = document.getElementById('targetDate').value.replaceAll('-','/');
-    const user = document.getElementById('targetUser').value;
+    parseText();
 
-    const newData = {
+    const date =
+        document.getElementById('targetDate')
+        .value
+        .replace(/-/g,'/');
+
+    const user =
+        document.getElementById('targetUser')
+        .value;
+
+    const obj = {
 
         date:date,
         user:user,
@@ -700,127 +741,161 @@ function handleDataSubmission(){
 
     };
 
-    const existIndex = healthData.findIndex(x=>x.date===date && x.user===user);
+    const idx =
+        healthData.findIndex(d =>
+            d.date === obj.date &&
+            d.user === obj.user
+        );
 
-    if(existIndex !== -1){
+    if(idx !== -1){
 
-        healthData[existIndex] = newData;
+        healthData[idx] = obj;
 
     }else{
 
-        healthData.unshift(newData);
+        healthData.unshift(obj);
 
     }
 
-    saveData();
+    saveLocal();
 
     renderTable();
 
+    alert('已新增 / 更新');
+
 }
 
-function renderMonthOptions(){
+/* 月份篩選 */
 
-    const select = document.getElementById('monthFilter');
+function buildMonthFilter(){
 
-    const months = [...new Set(
-        healthData.map(x=>x.date.substring(0,7))
-    )];
+    const select =
+        document.getElementById('monthFilter');
 
-    select.innerHTML = `<option value="全部">全部</option>`;
+    const months =
+        [...new Set(
+            healthData.map(d =>
+                d.date.substring(0,7)
+            )
+        )];
 
-    months.sort().reverse().forEach(m=>{
+    select.innerHTML =
+        '<option value="全部">全部</option>';
 
-        select.innerHTML += `<option value="${m}">${m}</option>`;
+    months.sort().reverse();
+
+    months.forEach(m => {
+
+        const option =
+            document.createElement('option');
+
+        option.value = m;
+
+        option.textContent =
+            m.replace('/','年 ') + '月';
+
+        select.appendChild(option);
 
     });
 
 }
 
+/* TABLE */
+
 function renderTable(){
 
-    renderMonthOptions();
+    buildMonthFilter();
 
-    const body = document.getElementById('tableBody');
+    const body =
+        document.getElementById('tableBody');
 
     body.innerHTML = '';
 
-    const userFilter = document.getElementById('userFilter').value;
-    const monthFilter = document.getElementById('monthFilter').value;
+    const userFilter =
+        document.getElementById('userFilter').value;
 
-    healthData.sort((a,b)=> new Date(b.date)-new Date(a.date));
+    const monthFilter =
+        document.getElementById('monthFilter').value;
 
     healthData.forEach((item,index)=>{
 
-        if(userFilter !== '全部' && item.user !== userFilter){
-            return;
-        }
+        if(
+            userFilter !== '全部' &&
+            item.user !== userFilter
+        ) return;
 
-        if(monthFilter !== '全部' && !item.date.startsWith(monthFilter)){
-            return;
-        }
+        if(
+            monthFilter !== '全部' &&
+            !item.date.startsWith(monthFilter)
+        ) return;
 
-        const mPulse = calculatePulse(item.mBP);
-        const ePulse = calculatePulse(item.eBP);
+        const mPulse =
+            pulseDiff(item.mBP);
 
-        const tr = document.createElement('tr');
+        const ePulse =
+            pulseDiff(item.eBP);
+
+        const tr =
+            document.createElement('tr');
 
         tr.innerHTML = `
 
-        <td>${item.date}</td>
+<td>${item.date}</td>
 
-        <td>${item.user}</td>
+<td>${item.user}</td>
 
-        <td class="morning-col">${item.mBP || ''}</td>
+<td class="morning-col">${item.mBP || ''}</td>
 
-        <td class="morning-col ${mPulse.className}">
-            ${mPulse.value}
-        </td>
+<td class="morning-col ${mPulse.className}">
+${mPulse.value}
+</td>
 
-        <td class="morning-col ${getHeartClass(item.mHR)}">
-            ${item.mHR || ''}
-        </td>
+<td class="morning-col">
+<span class="${hrClass(item.mHR)}">
+${item.mHR || ''}
+</span>
+</td>
 
-        <td class="morning-col">
-            ${item.mBO || ''}
-        </td>
+<td class="morning-col">${item.mBO || ''}</td>
 
-        <td class="evening-col">
-            ${item.eBP || ''}
-        </td>
+<td class="evening-col">${item.eBP || ''}</td>
 
-        <td class="evening-col ${ePulse.className}">
-            ${ePulse.value}
-        </td>
+<td class="evening-col ${ePulse.className}">
+${ePulse.value}
+</td>
 
-        <td class="evening-col ${getHeartClass(item.eHR)}">
-            ${item.eHR || ''}
-        </td>
+<td class="evening-col">
+<span class="${hrClass(item.eHR)}">
+${item.eHR || ''}
+</span>
+</td>
 
-        <td class="evening-col">
-            ${item.eBO || ''}
-        </td>
+<td class="evening-col">${item.eBO || ''}</td>
 
-        <td>
-            ${item.weight || ''}
-        </td>
+<td>${item.weight || ''}</td>
 
-        <td>
-            <input type="checkbox" class="poop-checkbox" ${item.poop ? 'checked' : ''} disabled>
-        </td>
+<td>
+<input
+type="checkbox"
+${item.poop ? 'checked' : ''}
+disabled
+>
+</td>
 
-        <td style="text-align:left;">
-            ${item.symptom || ''}
-        </td>
+<td style="text-align:left;">
+${item.symptom || ''}
+</td>
 
-        <td>
+<td>
+<button
+class="delete-btn"
+onclick="deleteRow(${index})"
+>
+<i class="fa-regular fa-trash-can"></i>
+</button>
+</td>
 
-            <button class="btn-delete-row" onclick="deleteRow(${index})">
-                <i class="fa-regular fa-trash-can"></i>
-            </button>
-
-        </td>
-
-        `;
+`;
 
         body.appendChild(tr);
 
@@ -828,13 +903,15 @@ function renderTable(){
 
 }
 
+/* DELETE */
+
 function deleteRow(index){
 
     if(confirm('確定刪除？')){
 
         healthData.splice(index,1);
 
-        saveData();
+        saveLocal();
 
         renderTable();
 
@@ -842,39 +919,40 @@ function deleteRow(index){
 
 }
 
-async function syncWithGoogleSheet(){
+/* SYNC */
+
+async function syncGoogleSheet(){
 
     if(healthData.length === 0){
-
-        alert('沒有資料');
-
+        alert('目前沒有資料');
         return;
-
     }
 
-    const spinner = document.getElementById('loadingTxt');
+    const loading =
+        document.getElementById('loadingTxt');
 
-    spinner.style.display = 'inline-block';
+    loading.style.display = 'inline-block';
 
     try{
 
-        const response = await fetch(GOOGLE_WEB_APP_URL,{
+        const response =
+            await fetch(
+                GOOGLE_WEB_APP_URL,
+                {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify(healthData)
+                }
+            );
 
-            method:'POST',
+        const result =
+            await response.json();
 
-            headers:{
-                'Content-Type':'application/json'
-            },
+        loading.style.display = 'none';
 
-            body:JSON.stringify(healthData)
-
-        });
-
-        const result = await response.json();
-
-        spinner.style.display = 'none';
-
-        if(result.success){
+        if(result.status === 'success'){
 
             alert('同步成功');
 
@@ -882,13 +960,11 @@ async function syncWithGoogleSheet(){
 
             alert('同步失敗');
 
-            console.log(result);
-
         }
 
     }catch(err){
 
-        spinner.style.display = 'none';
+        loading.style.display = 'none';
 
         console.error(err);
 
@@ -898,35 +974,7 @@ async function syncWithGoogleSheet(){
 
 }
 
-async function loadFromGoogleSheet(){
-
-    try{
-
-        const response = await fetch(GOOGLE_WEB_APP_URL);
-
-        const data = await response.json();
-
-        if(Array.isArray(data) && data.length > 0){
-
-            healthData = data;
-
-            saveData();
-
-            renderTable();
-
-        }
-
-    }catch(err){
-
-        console.log(err);
-
-    }
-
-}
-
 renderTable();
-
-loadFromGoogleSheet();
 
 </script>
 
