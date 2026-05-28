@@ -854,14 +854,14 @@
     // 在 script 區塊中加入以下程式碼
 
 // 1. 新增：從雲端讀取資料
+// 修改後的讀取函式
 function loadFromGoogleSheet() {
-    fetch(GOOGLE_WEB_APP_URL + "?action=getData")
+    fetch(GOOGLE_WEB_APP_URL) // 移除 ?action=getData
     .then(res => res.json())
     .then(data => {
         healthData = data;
         saveDataToLocal();
         renderTable();
-        console.log("雲端資料已載入");
     })
     .catch(err => console.error("讀取失敗", err));
 }
