@@ -693,22 +693,26 @@ async function syncWithGoogleSheet(){
     document.getElementById('loadingTxt').style.display = 'none';
 }
 
-async function loadDataFromCloud(){
+async function loadDataFromCloud() {
 
     try {
 
         const response = await fetch(GOOGLE_WEB_APP_URL);
+
         const data = await response.json();
 
-        if(Array.isArray(data) && data.length > 0){
-            healthData = data;
-            saveDataToLocal();
-            renderTable();
-        }
+        healthData = data || [];
 
-    } catch(err){
-        console.log('雲端資料讀取失敗');
+        renderTable();
+
+    } catch(err) {
+
+        console.error(err);
+
+        alert("讀取雲端資料失敗");
+
     }
+
 }
 
 window.onload = async function(){
