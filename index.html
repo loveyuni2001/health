@@ -580,23 +580,26 @@
 
 
 
-            function parseBlock(block) {
-
-                const res = { bp: "", hr: "", bo: "" };
-
-                const bpMatch = block.match(/(\d{2,3})-(\d{2,3})-(\d{2,3})/);
-
-                if (bpMatch) { res.bp = `${bpMatch[1]}/${bpMatch[2]}`; res.hr = bpMatch[3]; }
-
-                const remaining = block.replace(bpMatch ? bpMatch[0] : "", "");
-
-                const boMatch = remaining.match(/(\d{2,3})-(\d{2,3})/);
-
-                if (boMatch) { res.bo = `${boMatch[1]}/${boMatch[2]}`; }
-
-                return res;
-
-            }
+function parseBlock(block) {
+    const res = { bp: "", hr: "", bo: "" };
+    
+    // 改善：先找數字區塊，不強求中間要有減號
+    const numbers = block.match(/\d+/g); 
+    if (numbers) {
+        // 如果有3個數字，預設為 血壓高/低-心跳
+        if (numbers.length >= 3) {
+            res.bp = `${numbers[0]}/${numbers[1]}`;
+            res.hr = numbers[2];
+        }
+        // 如果有2個數字，預設為 血氧/心跳
+        const remaining = block.replace(numbers[0], "").replace(numbers[1], "").replace(numbers[2] || "", "");
+        const boMatch = remaining.match(/\d+/g);
+        if (boMatch && boMatch.length >= 2) {
+            res.bo = `${boMatch[0]}/${boMatch[1]}`;
+        }
+    }
+    return res;
+}
 
 
 
@@ -746,15 +749,19 @@
 
 
 
-    function updateField(index, field, value) {
+// 修改這個函式：去掉 renderTable()，只存資料
+function updateField(index, field, value) {
+    if (field === 'date') value = value.replace(/-/g, '/');
+    healthData[index][field] = value; 
+    saveDataToLocal(); 
+    // renderTable(); // 移除這行，不要在這裡強制重新渲染，焦點才不會跑掉
+}
 
-        if (field === 'date') value = value.replace(/-/g, '/');
-
-        healthData[index][field] = value; saveDataToLocal();
-
-        if (field === 'mBP' || field === 'eBP' || field === 'mHR' || field === 'eHR') { renderTable(); }
-
-    }
+// 修改 HTML 結構：將 onchange 改為 onblur (失去焦點時才觸發)
+// 在 renderTable() 函式內的表格欄位，將所有 onchange 換成 onblur
+// 例如：
+// 原本：onchange="updateField(${index}, 'mBP', this.value)"
+// 改成：onblur="updateField(${index}, 'mBP', this.value)"
 
 
 
