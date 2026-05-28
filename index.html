@@ -1,6 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,19 +14,16 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <style>
 
 :root{
     --bg:#F5F4F0;
-    --black:#111;
-    --white:#FFF;
+    --black:#111111;
+    --white:#FFFFFF;
     --sub:#777;
-    --danger:#D93025;
-    --green:#188038;
     --blue:#E8F0FE;
     --yellow:#FDF7E7;
+    --danger:#D93025;
 }
 
 *{
@@ -32,6 +32,7 @@
 
 body{
     margin:0;
+    padding:0;
     background:var(--bg);
     font-family:'Inter','Noto Sans TC',sans-serif;
     color:var(--black);
@@ -47,30 +48,30 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    flex-wrap:wrap;
-    gap:10px;
-    border-bottom:3px solid #111;
+    border-bottom:3px solid var(--black);
     padding-bottom:12px;
     margin-bottom:20px;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
-.title-group h1{
+.portal-header h1{
     margin:0;
     font-size:24px;
 }
 
-.title-group p{
-    margin:0;
+.portal-header p{
+    margin:3px 0 0 0;
     font-size:12px;
-    color:#666;
+    color:var(--sub);
 }
 
-.sync-btn{
-    background:var(--green);
+.btn-sync{
+    background:#188038;
     color:#fff;
     border:none;
-    padding:10px 16px;
-    border-radius:30px;
+    padding:12px 18px;
+    border-radius:12px;
     cursor:pointer;
     font-weight:700;
 }
@@ -79,36 +80,26 @@ body{
     display:grid;
     grid-template-columns:1fr 1.3fr;
     gap:20px;
-    margin-bottom:20px;
+    margin-bottom:25px;
 }
 
-@media(max-width:992px){
+@media(max-width:900px){
+
     .double-entry-wrapper{
         grid-template-columns:1fr;
     }
+
 }
 
 .entry-card{
     background:#fff;
-    border:2px solid #111;
+    border:2px solid var(--black);
     border-radius:16px;
     padding:20px;
-    position:relative;
-}
-
-.step-label{
-    position:absolute;
-    top:-12px;
-    left:20px;
-    background:#111;
-    color:#fff;
-    padding:3px 12px;
-    border-radius:30px;
-    font-size:11px;
 }
 
 .box-title{
-    font-size:16px;
+    font-size:18px;
     font-weight:700;
     margin-bottom:15px;
 }
@@ -116,11 +107,12 @@ body{
 .ai-textarea{
     width:100%;
     min-height:180px;
-    border:2px solid #111;
+    resize:none;
+    border:2px solid var(--black);
     border-radius:12px;
     padding:12px;
-    resize:none;
     font-size:14px;
+    background:#FAFAFA;
 }
 
 .right-form-grid{
@@ -133,10 +125,6 @@ body{
 
     .right-form-grid{
         grid-template-columns:repeat(2,1fr);
-    }
-
-    .mobile-full{
-        grid-column:span 2 !important;
     }
 
 }
@@ -153,63 +141,67 @@ body{
 }
 
 .form-control{
+    width:100%;
     height:42px;
-    border:2px solid #111;
+    border:2px solid var(--black);
     border-radius:12px;
     padding:8px 10px;
     font-size:14px;
-    font-weight:600;
 }
 
 .form-control::placeholder{
-    color:#B8B8B8;
+    color:#BBBBBB;
 }
 
-.section-title{
+.sub-title{
     grid-column:span 6;
-    padding:6px 10px;
+    padding:8px;
     border-radius:8px;
     font-weight:700;
-    font-size:13px;
 }
 
-.morning-title{
+@media(max-width:768px){
+
+    .sub-title{
+        grid-column:span 2;
+    }
+
+}
+
+.morning{
     background:var(--blue);
-    color:#1A73E8;
 }
 
-.evening-title{
+.evening{
     background:var(--yellow);
-    color:#B06000;
-}
-
-.poop-box{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:42px;
-    border:2px solid #111;
-    border-radius:12px;
 }
 
 .btn-add{
     grid-column:span 6;
-    background:#111;
-    color:#fff;
+    height:46px;
     border:none;
     border-radius:12px;
-    padding:12px;
-    font-size:14px;
+    background:var(--black);
+    color:#fff;
     font-weight:700;
     cursor:pointer;
+}
+
+@media(max-width:768px){
+
+    .btn-add{
+        grid-column:span 2;
+    }
+
 }
 
 .toolbar{
     display:flex;
     justify-content:space-between;
+    align-items:center;
+    margin:20px 0;
     flex-wrap:wrap;
     gap:10px;
-    margin-bottom:15px;
 }
 
 .filter-wrap{
@@ -218,16 +210,9 @@ body{
     flex-wrap:wrap;
 }
 
-.filter-box{
-    border:2px solid #111;
-    border-radius:30px;
-    background:#fff;
-    padding:6px 12px;
-}
-
 .table-card{
     background:#fff;
-    border:2px solid #111;
+    border:2px solid var(--black);
     border-radius:16px;
     overflow:hidden;
 }
@@ -238,21 +223,24 @@ body{
 
 table{
     width:100%;
-    min-width:1250px;
-    border-collapse:separate;
-    border-spacing:0;
-}
-
-th,td{
-    border-right:1px solid #fff;
-    border-bottom:1px solid #fff;
-    padding:8px;
-    text-align:center;
+    min-width:1200px;
+    border-collapse:collapse;
 }
 
 th{
     background:#111;
     color:#fff;
+    padding:10px 8px;
+    border-right:2px solid #333;
+    font-size:14px;
+}
+
+td{
+    border-right:2px solid #EAEAEA;
+    border-bottom:2px solid #EAEAEA;
+    padding:8px;
+    text-align:center;
+    background:#fff;
 }
 
 .morning-col{
@@ -263,23 +251,25 @@ th{
     background:var(--yellow);
 }
 
-.editable{
+.editable-cell{
     width:100%;
     border:none;
     background:transparent;
     text-align:center;
-    font-weight:700;
     font-size:14px;
+    padding:5px;
 }
 
-.editable:focus{
-    outline:none;
+.editable-cell:focus{
+    outline:2px solid #111;
+    border-radius:6px;
+    background:#fff;
 }
 
-.warning{
-    background:rgba(217,48,37,0.12);
+.value-warning{
+    background:rgba(217,48,37,0.15);
     color:var(--danger);
-    font-weight:800;
+    font-weight:700;
     border-radius:6px;
 }
 
@@ -287,21 +277,20 @@ th{
     text-align:left;
 }
 
-.delete-btn{
+.poop-checkbox{
+    width:18px;
+    height:18px;
+}
+
+.btn-delete{
     border:none;
     background:none;
     cursor:pointer;
-    color:#888;
-}
-
-.tip{
-    margin-top:15px;
-    text-align:center;
-    font-size:12px;
-    color:#666;
+    font-size:16px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -310,14 +299,13 @@ th{
 
 <div class="portal-header">
 
-<div class="title-group">
+<div>
 <h1>全家人健康智慧導航站</h1>
 <p>Family Health Intelligence Cloud Portal</p>
 </div>
 
-<button class="sync-btn" onclick="syncGoogle()">
-<i class="fa-solid fa-cloud-arrow-up"></i>
-同步至 Google Sheet
+<button class="btn-sync" onclick="syncWithGoogleSheet()">
+同步 Google Sheet
 </button>
 
 </div>
@@ -326,35 +314,33 @@ th{
 
 <div class="entry-card">
 
-<div class="step-label">01 智慧解析</div>
-
 <div class="box-title">
-<i class="fa-solid fa-wand-magic-sparkles"></i>
-LINE 文字全解析
+LINE 文字解析
 </div>
 
-<textarea id="aiInput" class="ai-textarea" placeholder="貼上LINE量測文字"></textarea>
+<textarea
+id="aiInput"
+class="ai-textarea"
+placeholder="貼上 LINE 文字"
+></textarea>
 
 </div>
 
 <div class="entry-card">
 
-<div class="step-label">02 手動紀錄 / 微調區</div>
-
 <div class="box-title">
-<i class="fa-solid fa-keyboard"></i>
 基礎設定與健康指標填寫
 </div>
 
 <div class="right-form-grid">
 
-<div class="input-group mobile-full" style="grid-column:span 2;">
-<label>設定日期</label>
+<div class="input-group" style="grid-column:span 2;">
+<label>日期</label>
 <input type="date" id="targetDate" class="form-control">
 </div>
 
-<div class="input-group">
-<label>記錄對象</label>
+<div class="input-group" style="grid-column:span 2;">
+<label>對象</label>
 <select id="targetUser" class="form-control">
 <option value="妃">妃</option>
 <option value="爸爸">爸爸</option>
@@ -363,59 +349,57 @@ LINE 文字全解析
 </select>
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>體重</label>
 <input type="text" id="manualWeight" class="form-control" placeholder="57.7">
 </div>
 
-<div class="input-group">
-<label>排便</label>
-<div class="poop-box">
-<input type="checkbox" id="manualPoop">
-</div>
+<div class="sub-title morning">
+【早上】指標
 </div>
 
-<div class="section-title morning-title">
-☀ 【早上】指標
-</div>
-
-<div class="input-group mobile-full" style="grid-column:span 2;">
+<div class="input-group" style="grid-column:span 2;">
 <label>早上血壓</label>
 <input type="text" id="morningBP" class="form-control" placeholder="112/79">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>早上心跳</label>
 <input type="text" id="morningHR" class="form-control" placeholder="84">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>早上血氧/心跳</label>
 <input type="text" id="morningBO" class="form-control" placeholder="97/75">
 </div>
 
-<div class="section-title evening-title">
-🌙 【晚上】指標
+<div class="sub-title evening">
+【晚上】指標
 </div>
 
-<div class="input-group mobile-full" style="grid-column:span 2;">
+<div class="input-group" style="grid-column:span 2;">
 <label>晚上血壓</label>
-<input type="text" id="eveningBP" class="form-control" placeholder="131/76">
+<input type="text" id="eveningBP" class="form-control" placeholder="128/79">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>晚上心跳</label>
 <input type="text" id="eveningHR" class="form-control" placeholder="92">
 </div>
 
-<div class="input-group">
+<div class="input-group" style="grid-column:span 2;">
 <label>晚上血氧/心跳</label>
 <input type="text" id="eveningBO" class="form-control" placeholder="96/90">
 </div>
 
-<div class="input-group mobile-full" style="grid-column:span 6;">
+<div class="input-group" style="grid-column:span 6;">
 <label>症狀與服藥備註</label>
-<input type="text" id="manualSymptom" class="form-control" placeholder="特殊狀況備註">
+<input type="text" id="manualSymptom" class="form-control" placeholder="特殊狀況">
+</div>
+
+<div class="input-group">
+<label>排便</label>
+<input type="checkbox" id="manualPoop" class="poop-checkbox">
 </div>
 
 <button class="btn-add" onclick="handleDataSubmission()">
@@ -423,37 +407,35 @@ LINE 文字全解析
 </button>
 
 </div>
+
 </div>
+
 </div>
 
 <div class="toolbar">
 
-<div style="font-weight:700;">
-03 當機紀錄異動台
-</div>
-
 <div class="filter-wrap">
 
-<div class="filter-box">
-<select id="userFilter" onchange="renderTable()">
+<select id="userFilter" class="form-control" onchange="renderTable()">
 <option value="全部">全部成員</option>
 <option value="妃">妃</option>
 <option value="爸爸">爸爸</option>
 <option value="媽媽">媽媽</option>
 <option value="通">通</option>
 </select>
-</div>
 
-<div class="filter-box">
-<select id="monthFilter" onchange="renderTable()">
+<select id="monthFilter" class="form-control" onchange="renderTable()">
 <option value="全部">全部月份</option>
+<option value="2026/05">2026/05</option>
+<option value="2026/06">2026/06</option>
 </select>
-</div>
 
 </div>
+
 </div>
 
 <div class="table-card">
+
 <div class="table-responsive">
 
 <table>
@@ -461,16 +443,19 @@ LINE 文字全解析
 <thead>
 
 <tr>
+
 <th rowspan="2">日期</th>
 <th rowspan="2">對象</th>
 
 <th colspan="4">【早上】紀錄</th>
+
 <th colspan="4">【晚上】紀錄</th>
 
 <th rowspan="2">體重</th>
 <th rowspan="2">排便</th>
 <th rowspan="2">症狀與服藥備註</th>
 <th rowspan="2">操作</th>
+
 </tr>
 
 <tr>
@@ -494,10 +479,7 @@ LINE 文字全解析
 </table>
 
 </div>
-</div>
 
-<div class="tip">
-資料會保存在本機與 Google Sheet
 </div>
 
 </div>
@@ -512,84 +494,107 @@ document.getElementById('targetDate').valueAsDate = new Date();
 let healthData =
 JSON.parse(localStorage.getItem('family_health_data')) || [];
 
-function saveLocal(){
+function saveDataToLocal(){
+
     localStorage.setItem(
         'family_health_data',
         JSON.stringify(healthData)
     );
-}
-
-function pulseDiff(bp){
-
-    if(!bp.includes('/')) return '';
-
-    const p = bp.split('/');
-
-    return parseInt(p[0]) - parseInt(p[1]);
-}
-
-function warningClass(v){
-    return parseInt(v) > 100 ? 'warning' : '';
-}
-
-function parseAI(){
-
-    const txt =
-    document.getElementById('aiInput')
-    .value
-    .replace(/\s/g,'');
-
-    const bpMatches =
-    txt.match(/\d{2,3}-\d{2,3}-\d{2,3}/g);
-
-    const boMatches =
-    txt.match(/\d{2,3}-\d{2,3}/g);
-
-    if(bpMatches && bpMatches[0]){
-
-        const m =
-        bpMatches[0].split('-');
-
-        document.getElementById('morningBP').value =
-        m[0]+'/'+m[1];
-
-        document.getElementById('morningHR').value =
-        m[2];
-    }
-
-    if(boMatches && boMatches[0]){
-
-        document.getElementById('morningBO').value =
-        boMatches[0].replace('-','/');
-    }
-
-    if(bpMatches && bpMatches[1]){
-
-        const e =
-        bpMatches[1].split('-');
-
-        document.getElementById('eveningBP').value =
-        e[0]+'/'+e[1];
-
-        document.getElementById('eveningHR').value =
-        e[2];
-    }
-
-    if(boMatches && boMatches[1]){
-
-        document.getElementById('eveningBO').value =
-        boMatches[1].replace('-','/');
-    }
 
 }
 
-document
-.getElementById('aiInput')
-.addEventListener('input',parseAI);
+function parseBlock(block){
+
+    const result = {
+        bp:"",
+        hr:"",
+        bo:""
+    };
+
+    const lines = block
+        .split(/\n|\r/)
+        .map(v=>v.trim())
+        .filter(v=>v!=='');
+
+    lines.forEach(line=>{
+
+        const bpHr =
+        line.match(/^(\d{2,3})-(\d{2,3})-(\d{2,3})$/);
+
+        if(bpHr){
+
+            result.bp =
+            `${bpHr[1]}/${bpHr[2]}`;
+
+            result.hr =
+            bpHr[3];
+
+        }
+
+        const bo =
+        line.match(/^(\d{2,3})-(\d{2,3})$/);
+
+        if(bo && !bpHr){
+
+            result.bo =
+            `${bo[1]}/${bo[2]}`;
+
+        }
+
+    });
+
+    return result;
+
+}
+
+function calculatePulseDifference(bp){
+
+    if(!bp || !bp.includes('/')){
+
+        return {
+            value:'—',
+            className:''
+        };
+
+    }
+
+    const parts = bp.split('/');
+
+    const high = parseInt(parts[0]);
+    const low = parseInt(parts[1]);
+
+    if(isNaN(high)||isNaN(low)){
+
+        return {
+            value:'—',
+            className:''
+        };
+
+    }
+
+    const diff = high-low;
+
+    return {
+        value:diff,
+        className:diff>60?'value-warning':''
+    };
+
+}
+
+function getHeartRateClass(hr){
+
+    return parseInt(hr)>100
+        ? 'value-warning'
+        : '';
+
+}
 
 function handleDataSubmission(){
 
-    const date =
+    const text =
+    document.getElementById('aiInput').value;
+
+    const formattedDate =
     document.getElementById('targetDate')
     .value
     .replace(/-/g,'/');
@@ -597,243 +602,356 @@ function handleDataSubmission(){
     const user =
     document.getElementById('targetUser').value;
 
-    const obj = {
+    let tempRecord = {
 
-        date:date,
-        user:user,
+        mBP:
+        document.getElementById('morningBP').value,
 
-        mBP:document.getElementById('morningBP').value,
-        mHR:document.getElementById('morningHR').value,
-        mBO:document.getElementById('morningBO').value,
+        mHR:
+        document.getElementById('morningHR').value,
 
-        eBP:document.getElementById('eveningBP').value,
-        eHR:document.getElementById('eveningHR').value,
-        eBO:document.getElementById('eveningBO').value,
+        mBO:
+        document.getElementById('morningBO').value,
 
-        weight:document.getElementById('manualWeight').value,
+        eBP:
+        document.getElementById('eveningBP').value,
 
-        poop:document.getElementById('manualPoop').checked,
+        eHR:
+        document.getElementById('eveningHR').value,
 
-        symptom:document.getElementById('manualSymptom').value
+        eBO:
+        document.getElementById('eveningBO').value,
+
+        weight:
+        document.getElementById('manualWeight').value,
+
+        poop:
+        document.getElementById('manualPoop').checked,
+
+        symptom:
+        document.getElementById('manualSymptom').value
+
     };
 
-    const idx =
-    healthData.findIndex(
-        x=>x.date===date && x.user===user
+    if(text.trim()!==''){
+
+        const eveningIndex =
+        text.search(/[晚夜]/);
+
+        let morningBlock = '';
+        let eveningBlock = '';
+
+        if(eveningIndex!==-1){
+
+            morningBlock =
+            text.substring(0,eveningIndex);
+
+            eveningBlock =
+            text.substring(eveningIndex);
+
+        }else{
+
+            morningBlock = text;
+
+        }
+
+        const mObj =
+        parseBlock(morningBlock);
+
+        tempRecord.mBP = mObj.bp;
+        tempRecord.mHR = mObj.hr;
+        tempRecord.mBO = mObj.bo;
+
+        if(eveningBlock){
+
+            const eObj =
+            parseBlock(eveningBlock);
+
+            tempRecord.eBP = eObj.bp;
+            tempRecord.eHR = eObj.hr;
+            tempRecord.eBO = eObj.bo;
+
+        }
+
+    }
+
+    const matchIndex =
+    healthData.findIndex(d=>
+
+        d.date===formattedDate &&
+        d.user===user
+
     );
 
-    if(idx>-1){
+    if(matchIndex!==-1){
 
-        healthData[idx]=obj;
+        healthData[matchIndex] = {
+            ...healthData[matchIndex],
+            ...tempRecord
+        };
 
     }else{
 
-        healthData.unshift(obj);
+        healthData.unshift({
+
+            date:formattedDate,
+            user:user,
+            ...tempRecord
+
+        });
 
     }
 
-    saveLocal();
+    saveDataToLocal();
 
     renderTable();
-}
-
-function renderMonths(){
-
-    const sel =
-    document.getElementById('monthFilter');
-
-    const months =
-    [...new Set(
-        healthData.map(x=>x.date.substring(0,7))
-    )];
-
-    sel.innerHTML =
-    '<option value="全部">全部月份</option>';
-
-    months.forEach(m=>{
-
-        sel.innerHTML +=
-        `<option value="${m}">${m}</option>`;
-
-    });
 
 }
 
-function updateField(i,key,val){
+function updateField(index,field,value){
 
-    healthData[i][key]=val;
+    if(field==='date'){
 
-    saveLocal();
+        value =
+        value.replace(/-/g,'/');
 
-    renderTable();
-}
-
-function deleteRow(i){
-
-    if(confirm('確定刪除？')){
-
-        healthData.splice(i,1);
-
-        saveLocal();
-
-        renderTable();
     }
+
+    healthData[index][field]=value;
+
+    saveDataToLocal();
+
+    renderTable();
+
+}
+
+function deleteRow(index){
+
+    healthData.splice(index,1);
+
+    saveDataToLocal();
+
+    renderTable();
+
 }
 
 function renderTable(){
 
-    renderMonths();
-
-    const body =
+    const tableBody =
     document.getElementById('tableBody');
 
-    body.innerHTML='';
+    tableBody.innerHTML='';
 
-    const uf =
+    const filterUser =
     document.getElementById('userFilter').value;
 
-    const mf =
+    const filterMonth =
     document.getElementById('monthFilter').value;
 
-    healthData.forEach((d,i)=>{
+    healthData.forEach((item,index)=>{
 
-        if(uf!=='全部' && d.user!==uf) return;
+        if(
+            filterUser!=='全部' &&
+            item.user!==filterUser
+        ){
+            return;
+        }
 
-        if(mf!=='全部' && !d.date.startsWith(mf)) return;
+        if(
+            filterMonth!=='全部' &&
+            !item.date.startsWith(filterMonth)
+        ){
+            return;
+        }
 
-        const tr=document.createElement('tr');
+        const mPulse =
+        calculatePulseDifference(item.mBP);
 
-        const mp=pulseDiff(d.mBP);
-        const ep=pulseDiff(d.eBP);
+        const ePulse =
+        calculatePulseDifference(item.eBP);
 
-        tr.innerHTML=`
+        const tr =
+        document.createElement('tr');
+
+        tr.innerHTML = `
 
 <td>
-<input type="date"
-class="editable"
-value="${d.date.replace(/\//g,'-')}"
-onchange="updateField(${i},'date',this.value.replace(/-/g,'/'))">
+<input
+type="date"
+class="editable-cell"
+value="${item.date.replace(/\//g,'-')}"
+onchange="updateField(${index},'date',this.value)"
+>
 </td>
 
 <td>
 
 <select
-class="editable"
-onchange="updateField(${i},'user',this.value)">
+class="editable-cell"
+onchange="updateField(${index},'user',this.value)"
+>
 
-<option value="妃" ${d.user==='妃'?'selected':''}>妃</option>
-<option value="爸爸" ${d.user==='爸爸'?'selected':''}>爸爸</option>
-<option value="媽媽" ${d.user==='媽媽'?'selected':''}>媽媽</option>
-<option value="通" ${d.user==='通'?'selected':''}>通</option>
+<option value="妃" ${item.user==='妃'?'selected':''}>妃</option>
+<option value="爸爸" ${item.user==='爸爸'?'selected':''}>爸爸</option>
+<option value="媽媽" ${item.user==='媽媽'?'selected':''}>媽媽</option>
+<option value="通" ${item.user==='通'?'selected':''}>通</option>
 
 </select>
 
 </td>
 
 <td class="morning-col">
-<input class="editable"
-value="${d.mBP}"
-onchange="updateField(${i},'mBP',this.value)">
+<input
+type="text"
+class="editable-cell"
+value="${item.mBP||''}"
+onchange="updateField(${index},'mBP',this.value)"
+>
 </td>
 
-<td class="morning-col ${mp>60?'warning':''}">
-${mp}
-</td>
-
-<td class="morning-col">
-<input class="editable ${warningClass(d.mHR)}"
-value="${d.mHR}"
-onchange="updateField(${i},'mHR',this.value)">
+<td class="morning-col ${mPulse.className}">
+${mPulse.value}
 </td>
 
 <td class="morning-col">
-<input class="editable"
-value="${d.mBO}"
-onchange="updateField(${i},'mBO',this.value)">
+
+<input
+type="text"
+class="editable-cell ${getHeartRateClass(item.mHR)}"
+value="${item.mHR||''}"
+onchange="updateField(${index},'mHR',this.value)"
+>
+
+</td>
+
+<td class="morning-col">
+
+<input
+type="text"
+class="editable-cell"
+value="${item.mBO||''}"
+onchange="updateField(${index},'mBO',this.value)"
+>
+
 </td>
 
 <td class="evening-col">
-<input class="editable"
-value="${d.eBP}"
-onchange="updateField(${i},'eBP',this.value)">
+
+<input
+type="text"
+class="editable-cell"
+value="${item.eBP||''}"
+onchange="updateField(${index},'eBP',this.value)"
+>
+
 </td>
 
-<td class="evening-col ${ep>60?'warning':''}">
-${ep}
+<td class="evening-col ${ePulse.className}">
+${ePulse.value}
 </td>
 
 <td class="evening-col">
-<input class="editable ${warningClass(d.eHR)}"
-value="${d.eHR}"
-onchange="updateField(${i},'eHR',this.value)">
+
+<input
+type="text"
+class="editable-cell ${getHeartRateClass(item.eHR)}"
+value="${item.eHR||''}"
+onchange="updateField(${index},'eHR',this.value)"
+>
+
 </td>
 
 <td class="evening-col">
-<input class="editable"
-value="${d.eBO}"
-onchange="updateField(${i},'eBO',this.value)">
+
+<input
+type="text"
+class="editable-cell"
+value="${item.eBO||''}"
+onchange="updateField(${index},'eBO',this.value)"
+>
+
 </td>
 
 <td>
-<input class="editable"
-value="${d.weight}"
-onchange="updateField(${i},'weight',this.value)">
+
+<input
+type="text"
+class="editable-cell"
+value="${item.weight||''}"
+onchange="updateField(${index},'weight',this.value)"
+>
+
 </td>
 
 <td>
-<input type="checkbox"
-${d.poop?'checked':''}
-onchange="updateField(${i},'poop',this.checked)">
+
+<input
+type="checkbox"
+class="poop-checkbox"
+${item.poop?'checked':''}
+onchange="updateField(${index},'poop',this.checked)"
+>
+
 </td>
 
 <td>
-<input class="editable symptom-input"
-value="${d.symptom}"
-onchange="updateField(${i},'symptom',this.value)">
+
+<input
+type="text"
+class="editable-cell symptom-input"
+value="${item.symptom||''}"
+onchange="updateField(${index},'symptom',this.value)"
+>
+
 </td>
 
 <td>
-<button class="delete-btn"
-onclick="deleteRow(${i})">
+
+<button
+class="btn-delete"
+onclick="deleteRow(${index})"
+>
 🗑
 </button>
+
 </td>
 
 `;
 
-        body.appendChild(tr);
+        tableBody.appendChild(tr);
 
     });
 
 }
 
-async function syncGoogle(){
+function syncWithGoogleSheet(){
 
-    try{
+    fetch(GOOGLE_WEB_APP_URL,{
 
-        const res =
-        await fetch(GOOGLE_WEB_APP_URL,{
+        method:'POST',
 
-            method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
 
-            headers:{
-                'Content-Type':'application/json'
-            },
+        body:JSON.stringify(healthData)
 
-            body:JSON.stringify(healthData)
+    })
 
-        });
-
-        const txt = await res.text();
+    .then(()=>{
 
         alert('同步成功');
 
-    }catch(err){
+    })
+
+    .catch(err=>{
 
         console.error(err);
 
         alert('同步失敗');
-    }
+
+    });
+
 }
 
 renderTable();
@@ -842,3 +960,4 @@ renderTable();
 
 </body>
 </html>
+```
