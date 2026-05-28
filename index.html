@@ -1,46 +1,3 @@
-# GitHub Pages 專用完整版（已修正 Google Sheet 連動 + 手機版 + 全寬）
-
-## 先做這 3 件事
-
-### ① Apps Script 部署權限
-
-Apps Script 必須重新部署：
-
-* 部署 → 管理部署作業
-* 編輯
-* 執行身分：我
-* 存取權限：任何人
-* 重新部署
-
----
-
-### ② GitHub Pages 放法
-
-建立：
-
-```text
-index.html
-```
-
-把下面完整 HTML 全部覆蓋貼上。
-
----
-
-### ③ 修改這行
-
-搜尋：
-
-```javascript
-const GOOGLE_WEB_APP_URL =
-```
-
-改成你的 Apps Script 網址。
-
----
-
-# 完整 HTML（直接全貼）
-
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -321,45 +278,133 @@ td {
     font-weight: 700;
 }
 
-@media(max-width: 900px){
+/* ===== 手機版完整優化 ===== */
+@media (max-width: 768px) {
 
-    body {
-        padding: 6px;
+    body{
+        overflow-x:hidden;
     }
 
-    .double-entry-wrapper {
-        grid-template-columns: 1fr;
+    .container{
+        width:100%;
+        max-width:100%;
+        padding:10px;
     }
 
-    .title-group h1 {
-        font-size: 30px;
+    .portal-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
     }
 
-    .portal-header {
-        flex-direction: column;
-        align-items: stretch;
+    .title-group h1{
+        font-size:20px;
+        line-height:1.3;
     }
 
-    .btn-sync-cloud {
-        width: 100%;
+    .sync-btn-container{
+        width:100%;
     }
 
-    .right-form-grid {
-        grid-template-columns: repeat(2,1fr);
+    .btn-sync-cloud{
+        width:100%;
+        justify-content:center;
+        font-size:15px;
     }
 
-    .sub-section-title,
-    .btn-submit-container {
-        grid-column: span 2;
+    .double-entry-wrapper{
+        grid-template-columns:1fr !important;
+        gap:15px;
     }
 
-    .ai-textarea {
-        min-height: 250px;
+    .entry-card{
+        padding:14px;
+        border-radius:18px;
     }
 
-    .table-responsive table {
-        min-width: 1200px;
+    .right-form-grid{
+        grid-template-columns:1fr 1fr !important;
+        gap:10px;
     }
+
+    .input-group{
+        grid-column:span 1 !important;
+    }
+
+    .sp-mobile-full{
+        grid-column:span 2 !important;
+    }
+
+    .sub-section-title{
+        grid-column:span 2 !important;
+    }
+
+    .btn-submit-container{
+        grid-column:span 2 !important;
+    }
+
+    .form-control{
+        height:44px;
+        font-size:16px;
+    }
+
+    .ai-textarea{
+        min-height:220px;
+        font-size:16px;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .filter-container{
+        width:100%;
+        display:flex;
+        gap:10px;
+    }
+
+    .select-box-wrapper{
+        flex:1;
+    }
+
+    .filter-select{
+        width:100%;
+        font-size:15px;
+    }
+
+    .table-card{
+        overflow:hidden;
+        border-radius:20px;
+    }
+
+    .table-responsive{
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:1200px;
+    }
+
+    th{
+        font-size:13px;
+        padding:10px 6px;
+        white-space:nowrap;
+    }
+
+    td{
+        padding:6px;
+        font-size:13px;
+    }
+
+    .editable-cell{
+        min-width:80px;
+        font-size:14px;
+        padding:6px;
+    }
+
 }
 </style>
 </head>
@@ -674,22 +719,3 @@ window.onload = async function(){
 </script>
 </body>
 </html>
-```
-
----
-
-# 最後非常重要
-
-Apps Script 後端也要支援 GET + POST。
-
-如果你的 Apps Script 不是下面這種，我可以下一步直接幫你做完整 Apps Script。
-
-因為你現在的問題其實是：
-
-* HTML 前端 OK
-* 但 Apps Script 後端沒有正確回傳 JSON
-
-所以資料才讀不到。
-
-下一步你只要把 Apps Script 程式貼給我。
-我直接幫你改成可用版。
