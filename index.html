@@ -1247,18 +1247,18 @@ function updateField(index, field, value) {
 // --- 新增自動載入 Google Sheet 資料的功能 ---
 window.addEventListener('load', async () => {
     try {
-        const response = await fetch(GOOGLE_WEB_APP_URL);
-        const data = await response.json();
-        
-        // 如果抓到資料，直接覆蓋原本的 healthData 並重新渲染
-        if (Array.isArray(data) && data.length > 0) {
+        const res = await fetch(GOOGLE_WEB_APP_URL);
+        const data = await res.json();
+        // 只要有抓到資料，就「強制覆蓋」本地的資料庫
+        if (data && data.length > 0) {
             healthData = data;
-            saveDataToLocal(); // 更新本地暫存
-            renderTable();     // 重新畫表格
-            console.log("已成功從 Google Sheet 讀取資料");
+            saveDataToLocal();
+            renderTable();
+            console.log("已從雲端載入最新完整資料");
         }
-    } catch (err) {
-        console.error("無法連線至雲端，使用本地暫存紀錄:", err);
+    } catch(e) {
+        console.error("雲端讀取失敗，使用本地紀錄", e);
+        renderTable();
     }
 });
 
