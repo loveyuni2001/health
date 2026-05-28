@@ -857,6 +857,25 @@
 
 
     renderTable();
+    // 在 script 區塊中加入以下程式碼
+
+// 1. 新增：從雲端讀取資料
+function loadFromGoogleSheet() {
+    fetch(GOOGLE_WEB_APP_URL + "?action=getData")
+    .then(res => res.json())
+    .then(data => {
+        healthData = data;
+        saveDataToLocal();
+        renderTable();
+        console.log("雲端資料已載入");
+    })
+    .catch(err => console.error("讀取失敗", err));
+}
+
+// 2. 修改：網頁載入時自動執行
+window.onload = function() {
+    loadFromGoogleSheet(); // 頁面載入時先抓一次雲端最新資料
+};
 
 </script>
 
