@@ -485,90 +485,50 @@
 
 
 <script>
+    // 1. 參數設定
     const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz29A7pisPNFhFjVWXKAVwRNES--3hsRHyrGKvK2l2QiJ6eb653eGXrAszJ28azkdM-7g/exec";
-
-    document.getElementById('targetDate').valueAsDate = new Date();
     let healthData = JSON.parse(localStorage.getItem('family_health_data')) || [];
 
-    // --- 1. 自動從雲端抓資料 (解決下方沒有資料的問題) ---
-    async function loadFromCloud() {
-        try {
-            const response = await fetch(GOOGLE_WEB_APP_URL);
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
-                healthData = data;
-                saveDataToLocal();
-                renderTable();
-                console.log("雲端資料已載入");
-            }
-        } catch (e) {
-            console.warn("目前無法讀取雲端，將使用本地暫存紀錄。");
-        }
+    // 2. 工具函式 (必須放在最前面，確保 renderTable 讀得到)
+    function calculatePulseDifference(bpString) {
+        if (!bpString || !bpString.includes('/')) return { value: "—", className: "" };
+        const parts = bpString.split('/');
+        const diff = parseInt(parts[0]) - parseInt(parts[1]);
+        if (isNaN(diff)) return { value: "—", className: "" };
+        return { value: diff, className: diff > 60 ? "value-warning" : "" };
     }
 
-    // --- 2. 儲存與渲染 ---
+    function getHeartRateClass(hrString) {
+        return (parseInt(hrString) > 100) ? "value-warning" : "";
+    }
+
     function saveDataToLocal() {
         localStorage.setItem('family_health_data', JSON.stringify(healthData));
     }
 
+    // 3. 渲染函式
     function renderTable() {
         const tableBody = document.getElementById('tableBody');
-        const filterUser = document.getElementById('userFilter').value;
-        const filterMonth = document.getElementById('monthFilter').value;
+        if (!tableBody) return; // 防止找不到容器
         tableBody.innerHTML = '';
 
         healthData.sort((a,b) => new Date(b.date) - new Date(a.date));
 
         healthData.forEach((item, index) => {
-            if (filterUser !== '全部' && item.user !== filterUser) return;
-            if (filterMonth !== '全部' && !item.date.startsWith(filterMonth)) return;
-
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="date" class="editable-cell" value="${item.date.replace(/\//g, '-')}" onchange="updateField(${index}, 'date', this.value)"></td>
-                <td><select class="editable-cell" onchange="updateField(${index}, 'user', this.value)">
-                    <option value="妃" ${item.user==='妃'?'selected':''}>妃</option>
-                    <option value="爸爸" ${item.user==='爸爸'?'selected':''}>爸爸</option>
-                    <option value="媽媽" ${item.user==='媽媽'?'selected':''}>媽媽</option>
-                    <option value="通" ${item.user==='通'?'selected':''}>通</option>
-                </select></td>
-                <td class="morning-col"><input type="text" class="editable-cell" value="${item.mBP}" onchange="updateField(${index}, 'mBP', this.value)"></td>
-                <td>${calculatePulseDifference(item.mBP).value}</td>
-                <td class="morning-col"><input type="text" class="editable-cell" value="${item.mHR}" onchange="updateField(${index}, 'mHR', this.value)"></td>
-                <td class="morning-col"><input type="text" class="editable-cell" value="${item.mBO}" onchange="updateField(${index}, 'mBO', this.value)"></td>
-                <td class="evening-col"><input type="text" class="editable-cell" value="${item.eBP}" onchange="updateField(${index}, 'eBP', this.value)"></td>
-                <td>${calculatePulseDifference(item.eBP).value}</td>
-                <td class="evening-col"><input type="text" class="editable-cell" value="${item.eHR}" onchange="updateField(${index}, 'eHR', this.value)"></td>
-                <td class="evening-col"><input type="text" class="editable-cell" value="${item.eBO}" onchange="updateField(${index}, 'eBO', this.value)"></td>
-                <td><input type="text" class="editable-cell" value="${item.weight}" onchange="updateField(${index}, 'weight', this.value)"></td>
-                <td><input type="checkbox" class="poop-checkbox" ${item.poop ? 'checked' : ''} onchange="updateField(${index}, 'poop', this.checked)"></td>
-                <td><input type="text" class="editable-cell" value="${item.symptom}" onchange="updateField(${index}, 'symptom', this.value)"></td>
-                <td><button class="btn-delete-row" onclick="deleteRow(${index})"><i class="fa-regular fa-trash-can"></i></button></td>
-            `;
+            const mPulse = calculatePulseDifference(item.mBP);
+            // ... (請在此處貼上您原本完整的 tr.innerHTML 渲染邏輯)
+            // 確保 renderTable 邏輯完整，這樣就不會報錯
             tableBody.appendChild(tr);
         });
     }
 
-    // --- 3. 新增與同步 (保持原本邏輯，確保能正常運作) ---
-    function handleDataSubmission() {
-        // ... (保持您原本的 handleDataSubmission 邏輯)
-        // 記得執行 saveDataToLocal() 和 renderTable()
-    }
+    // 4. 初始化
+    window.addEventListener('load', () => {
+        renderTable();
+    });
 
-    function syncWithGoogleSheet() {
-        // ... (保持您原本的 syncWithGoogleSheet 邏輯)
-    }
-
-    function updateField(index, field, value) {
-        if (field === 'date') value = value.replace(/-/g, '/');
-        healthData[index][field] = value; 
-        saveDataToLocal(); 
-        renderTable(); 
-    }
-
-    // 啟動頁面
-    loadFromCloud();
-    renderTable();
+    // 5. 其他處理函式 (handleDataSubmission, syncWithGoogleSheet 等放在最後)
 </script>
 </body>
 
