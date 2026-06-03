@@ -1245,9 +1245,14 @@ function updateField(index, field, value) {
 
     renderTable();
 
-// --- 新增自動載入 Google Sheet 資料的功能 ---
+// 合併：只用一個入口，確保資料讀取完後才處理選項與渲染
 window.addEventListener('load', async () => {
-    console.log("正在從 Google Sheet 撈取資料...");
+    console.log("正在初始化...");
+    
+    // 1. 初始化月份選單 (確保選項先生成)
+    initMonthOptions(); 
+
+    // 2. 嘗試從 Google Sheet 撈取資料
     try {
         const res = await fetch(GOOGLE_WEB_APP_URL);
         const data = await res.json();
@@ -1255,32 +1260,24 @@ window.addEventListener('load', async () => {
         if (data && data.length > 0) {
             healthData = data; 
             saveDataToLocal();
-            
-            // --- 這裡開始執行月份設定 ---
-            generateMonthOptions(); // 1. 先生成選單
-            document.getElementById('monthFilter').value = "全部"; // 2. 預設選全部
-            renderTable(); // 3. 最後才渲染表格
-            
-            alert("已同步雲端最新資料！");
-        } else {
-            generateMonthOptions();
-            renderTable();
+            console.log("雲端資料同步成功");
         }
     } catch(e) {
-        console.error("雲端連線失敗，使用本地紀錄", e);
-        generateMonthOptions();
-        renderTable();
+        console.warn("雲端連線失敗，繼續使用本地紀錄", e);
     }
+
+    // 3. 最後統一渲染一次
+    renderTable(); 
 });
-// 獨立運作：等網頁完全載入後，才處理選單，絕對不干擾同步邏輯
-window.addEventListener('DOMContentLoaded', () => {
+
+// 獨立出來的選單生成函數
+function initMonthOptions() {
     const select = document.getElementById('monthFilter');
     if (!select) return;
 
     select.innerHTML = '';
     const now = new Date();
     
-    // 生成過去 6 個月到未來的選項
     for (let i = 6; i >= -1; i--) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         let val = `${d.getFullYear()}年${d.getMonth() + 1}月`;
@@ -1295,9 +1292,9 @@ window.addEventListener('DOMContentLoaded', () => {
     optAll.innerHTML = "全部";
     select.appendChild(optAll);
 
-    // 自動跳到當月
+    // 預設選當月
     select.value = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-});
+}
 </script> 
 
 </body>
