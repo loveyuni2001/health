@@ -431,7 +431,7 @@
                 <label>篩選月份:</label>
 
                 <select id="monthFilter" class="filter-select" onchange="renderTable()">
-                    initMonthFilter();
+                   
 
                     <option value="全部">全部月份</option><option value="2026/05" selected>2026年 5月</option><option value="2026/06">2026年 6月</option><option value="2026/04">2026年 4月</option>
 
@@ -1103,11 +1103,11 @@ function updateField(index, field, value) {
 
 
 
-            if (filterMonth !== '全部' && !item.date.startsWith(filterMonth)) return;
-
-
-
-
+            if (filterMonth !== '全部') {
+    const d = new Date(item.date);
+    const itemMonth = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+    if (filterMonth !== itemMonth) return;
+}
 
 
 
@@ -1277,9 +1277,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('monthFilter');
     if (!select) return;
 
-    // 1. 生成選項
     select.innerHTML = '';
     const now = new Date();
+    
+    // 生成過去 6 個月到未來的選項
     for (let i = 6; i >= -1; i--) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         let val = `${d.getFullYear()}年${d.getMonth() + 1}月`;
@@ -1288,14 +1289,14 @@ window.addEventListener('DOMContentLoaded', () => {
         opt.innerHTML = val;
         select.appendChild(opt);
     }
+    
     let optAll = document.createElement('option');
     optAll.value = "全部";
     optAll.innerHTML = "全部";
     select.appendChild(optAll);
 
-    // 2. 預設選取當月 (2026年6月)
-    const currentMonthVal = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-    select.value = currentMonthVal;
+    // 自動跳到當月
+    select.value = `${now.getFullYear()}年${now.getMonth() + 1}月`;
 });
 </script> 
 
