@@ -431,6 +431,7 @@
                 <label>篩選月份:</label>
 
                 <select id="monthFilter" class="filter-select" onchange="renderTable()">
+                    initMonthFilter();
 
                     <option value="全部">全部月份</option><option value="2026/05" selected>2026年 5月</option><option value="2026/06">2026年 6月</option><option value="2026/04">2026年 4月</option>
 
@@ -1271,30 +1272,14 @@ window.addEventListener('load', async () => {
         renderTable();
     }
 });
-// 自動設定篩選月份為當前月份 (格式例如：2026年6月)
-function setMonthToCurrent() {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1; // JS 的月份是 0-11，所以要 +1
-    
-    const filterSelect = document.getElementById('monthFilter'); // 請替換成你實際的 ID
-    const valueToSet = `${currentYear}年${currentMonth}月`;
-    
-    // 將選單的值設為當前年月
-    filterSelect.value = valueToSet;
-    
-    // 觸發篩選邏輯 (假設你原本有一個 filterData() 或 renderTable() 函式)
-    filterData(); 
-}
-    function generateMonthOptions() {
+// 獨立運作：等網頁完全載入後，才處理選單，絕對不干擾同步邏輯
+window.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('monthFilter');
     if (!select) return;
 
-    // 清空現有選項 (避免重複)
+    // 1. 生成選項
     select.innerHTML = '';
-
     const now = new Date();
-    // 產生過去 6 個月到未來的選項
     for (let i = 6; i >= -1; i--) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         let val = `${d.getFullYear()}年${d.getMonth() + 1}月`;
@@ -1303,13 +1288,15 @@ function setMonthToCurrent() {
         opt.innerHTML = val;
         select.appendChild(opt);
     }
-    
-    // 最後加上全部
     let optAll = document.createElement('option');
     optAll.value = "全部";
     optAll.innerHTML = "全部";
     select.appendChild(optAll);
-}
+
+    // 2. 預設選取當月 (2026年6月)
+    const currentMonthVal = `${now.getFullYear()}年${now.getMonth() + 1}月`;
+    select.value = currentMonthVal;
+});
 </script> 
 
 </body>
